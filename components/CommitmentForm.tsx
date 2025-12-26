@@ -7,6 +7,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UserCircle, Calendar, Trophy, Users, HelpCircle } from 'lucide-react';
 
+import { API_URL } from '../config';
+
 interface CommitmentFormProps {
     isOpen?: boolean;
     onClose?: () => void;
@@ -52,7 +54,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3001/api/register', {
+            const response = await fetch(`${API_URL}/api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

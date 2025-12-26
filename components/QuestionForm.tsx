@@ -7,6 +7,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, HelpCircle, Mail, MessageSquare } from 'lucide-react';
 
+import { API_URL } from '../config';
+
 interface QuestionFormProps {
     isOpen: boolean;
     onClose: () => void;
@@ -23,7 +25,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ isOpen, onClose }) => {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('http://localhost:3001/api/question', {
+            const response = await fetch(`${API_URL}/api/question`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

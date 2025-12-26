@@ -7,6 +7,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lock, ShieldCheck } from 'lucide-react';
 
+import { API_URL } from '../config';
+
 interface AdminLoginProps {
     isOpen: boolean;
     onClose: () => void;
@@ -25,7 +27,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onLoginSuccess
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:3001/api/login', {
+            const response = await fetch(`${API_URL}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),

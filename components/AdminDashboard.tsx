@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare, Trash2, Download } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface Registration {
     id: string;
@@ -46,7 +47,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
         setLoading(true);
         try {
             // Fetch registrations
-            const regResponse = await fetch('http://localhost:3001/api/registrations');
+            const regResponse = await fetch(`${API_URL}/api/registrations`);
             if (regResponse.ok) {
                 const data = await regResponse.json();
                 setRegistrations(data.sort((a: Registration, b: Registration) =>
@@ -55,7 +56,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
             }
 
             // Fetch questions
-            const qResponse = await fetch('http://localhost:3001/api/questions');
+            const qResponse = await fetch(`${API_URL}/api/questions`);
             if (qResponse.ok) {
                 const data = await qResponse.json();
                 setQuestions(data.sort((a: Question, b: Question) =>
@@ -85,7 +86,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
         }
 
         try {
-            const response = await fetch(`http://localhost:3001/api/${type}/${id}`, {
+            const response = await fetch(`${API_URL}/api/${type}/${id}`, {
                 method: 'DELETE',
             });
 
@@ -107,7 +108,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
 
     const handleExport = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/export/${activeTab}`);
+            const response = await fetch(`${API_URL}/api/export/${activeTab}`);
             if (response.ok) {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
