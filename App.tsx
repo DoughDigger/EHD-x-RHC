@@ -6,56 +6,275 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight } from 'lucide-react';
+
+// Import Icons
+import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight, Star, Plane, Utensils, MapPinned, Hotel, Bus } from 'lucide-react';
+
+
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import ArtistCard from './components/ArtistCard';
-import AIChat from './components/AIChat';
+import CommitmentForm, { CommitmentFormData } from './components/CommitmentForm';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
 import { Artist } from './types';
 import { useMobile } from './hooks/useMobile';
 
 // RHC Tournament Data
 const DIVISIONS: Artist[] = [
-  { 
-    id: '1', 
-    name: 'Tournament Details', 
-    genre: 'Format & Rules', 
-    day: 'APR 17-18', 
+  {
+    id: '1',
+    name: 'Tournament Details',
+    genre: 'Format & Rules',
+    day: 'APR 17-19',
     image: 'https://images.unsplash.com/photo-1580748141549-71748dbe0bdc?q=80&w=1000&auto=format&fit=crop',
-    description: `The EHD Spring Tour offers a professional hockey experience for players of all levels. \n\nGAME FORMAT:\nEvery team is guaranteed 5 games. Games consist of 3 x 15-minute stop-time periods. Ice resurfacing takes place between every game. \n\nRULES:\nWe play by modified IIHF rules. No checking in adult recreational divisions. Slapshots are allowed. Fighting leads to immediate disqualification. \n\nDIVISIONS:\nWe offer skill levels ranging from former pros to recreational beer leaguers. We strictly police roster rules to ensure competitive balance. \n\nSCHEDULE:\nThe tournament begins Friday morning and concludes with championship games on Sunday afternoon. A full schedule is released 2 weeks prior to the event.`
+    intro: `RIGA HOCKEY CUP is the largest youth ice hockey tournament in Europe, celebrating its 20th anniversary in 2026. The tournament fosters sportsmanship and the development of skills across multiple divisions in a competitive yet friendly environment.`,
+    thrillSection: {
+      title: '3 DAYS OF THRILL',
+      items: [
+        'Live player stats updated on official website www.rhc.com',
+        'Active social media posts coverage',
+        'Player of the game awards',
+        'BAUER ALL STAR Team awards for each age group',
+        'Sunday Finals and Awarding ceremony with all teams'
+      ],
+      videoLink: {
+        text: 'Check out highlights from RHC 2025',
+        url: 'https://www.youtube.com/watch?v=iPvC6G0_bdg'
+      }
+    },
+    description: `GAME FORMAT:\nEvery team is guaranteed 7 games over 3 days. Games consist of 3 x 15-minute stop-time periods. Ice resurfacing takes place between every game. \n\nRULES:\nAll games are conducted in accordance with IIHF rules. Body checking is allowed primarily along the boards when there's a "clear intention of playing the puck or attempting to gain possession," following IIHF guidelines but with unique elements, meaning hits must be puck-focused (e.g. open ice hits are ruled as penalty). \n\nSCHEDULE:\nThe tournament begins Friday morning and concludes with championship games on Sunday afternoon. A full schedule is released 2 weeks prior to the event.`
   },
-  { 
-    id: '2', 
-    name: 'Arenas', 
-    genre: 'Venues', 
-    day: 'APR 17-19', 
-    image: 'https://images.unsplash.com/photo-1515703407324-5f753afd8be8?q=80&w=1000&auto=format&fit=crop',
-    description: `Compete in Riga's finest ice hockey facilities. \n\nARENA RIGA:\nThe crown jewel of Latvian hockey. This 10,300-seat arena hosted the 2006 and 2021 IIHF World Championships. It features NHL-quality ice, professional locker rooms, and a massive jumbotron. \n\nVOLVO SPORTS CENTRE:\nThe premier practice facility in the city, featuring two regulation-sized rinks. Known for its fast ice and excellent spectator viewing areas. \n\nINBOX ICE HALL:\nA modern facility located in the suburbs, offering a perfect intimate setting for tournament play with an attached restaurant and bar overlooking the ice.`
+  {
+    id: '2',
+    name: 'Arenas',
+    genre: 'Venues',
+    day: 'APR 17-19',
+    image: '/arena_riga_thumb.jpg',
+    images: ['/arena_riga_thumb.jpg', '/arena_1.jpg', '/arena_2.jpg', '/arena_3.jpg', '/arena_4.jpg', '/arena_5.jpg', '/arena_6.jpg', '/arena_7.jpg'],
+    description: `RIGA HOCKEY CUP tournament is held in 10 new and modern arenas in close proximity each other.`,
+    listItems: [
+      'Akropole Arena (located in the middle of Shopping Mall)',
+      'Marupes Ledus Halle',
+      'Inbox Ledus Halle',
+      'Zemgales Ledus Halle',
+      'OZO Ledus Halle',
+      'Kurbads Ledus Halle',
+      'Daugavas Ledus Halle',
+      'Vidzemes Ledus Halle'
+    ]
   },
-  { 
-    id: '3', 
-    name: 'Pricing', 
-    genre: 'Packages', 
-    day: 'APR 18-19', 
-    image: 'https://images.unsplash.com/photo-1593341646782-e0b495cff86d?q=80&w=1000&auto=format&fit=crop',
-    description: `We offer comprehensive packages to make your trip seamless. \n\nINDIVIDUAL ENTRY ($195):\nIncludes minimum 4 games, jersey, socks, and access to all social events. Ideal for draft tournament players. \n\nTEAM ENTRY ($2500):\nRegister your full squad. Includes 15 player passes and 1 goalie pass. Does not include travel or accommodation. \n\nVIP TRAVEL PACKAGE ($1400/pp):\nIncludes 5 nights at a 4-star Hotel in Old Riga, airport transfers, daily breakfast, 3 team dinners, canal boat tour, and dedicated team guide. \n\n*Flights are not included in any package.`
+  {
+    id: '3',
+    name: 'Pricing',
+    genre: 'Packages',
+    day: 'APR 18-19',
+    image: '/pricing_tile.jpg',
+    description: '',
+    thrillSection: {
+      title: 'What\'s Included',
+      items: [
+        'Tournament Fee',
+        '6 nights (Check in Apr 14, Check out Apr 20) stay at 4* Hotel in Downtown Riga (Radisson Blu Daugava) incl. breakfast for all guests',
+        'Team bus transfers x8 (Airport transfers x2, Round trip transfer to games x6)',
+        '2 Guided Group Sightseeing Tours (Timing: Pre-tournament start; Options to be provided once roster confirmed)',
+        '3 lunches/ 2 dinners for Players only during Tournament days (Fri -Sat- Sun) at the Arenas',
+        '2 Pre-Tournament Exhibition games with local teams or practices',
+        '1 Group Dinner (Traditional Latvian cuisine)'
+      ]
+    },
+    exclusions: {
+      title: 'Not included',
+      items: [
+        'Airline tickets (Group ticket code will be provided for families to book flights. Standard airfare is approx. $1,000 - $1,100 per person (based on standard ticket offer with carry-on and 1 checked bag))',
+        'Additional team bus transfers (can be arranged for a total fee of CAD 200 one way)',
+        'Additional team dinners or other events',
+        'Travel Insurance',
+        'Game Livestreams (can be purchased for $25 CAD for full tournament)'
+      ]
+    },
+    pricing: {
+      title: 'CAD',
+      packages: [
+        { name: 'Fee based on 1 Player + 1 Parent (1 room) package:', price: '$ 3,400' },
+        { name: 'Fee based on 1 Player + 2 Guests (1 room) package:', price: '$ 4,600' },
+        { name: 'Fee based on 1 Player + 3 Guests (1 room) package:', price: '$ 5,900' }
+      ],
+      customText: 'Custom Packages are available on request',
+      paymentTerms: 'Non-refundable deposit of 50% from total package price required by Feb 15, 2026, full payment by Mar 15, 2026'
+    }
   },
 ];
 
+const CAROUSEL_IMAGES = [
+  '/riga_skyline.png',
+  '/beyond_ice_1.jpg',
+  '/beyond_ice_2.jpg',
+  '/beyond_ice_3.jpg',
+  '/beyond_ice_4.jpg',
+  '/beyond_ice_5.jpg',
+  '/beyond_ice_6.jpg',
+  '/beyond_ice_7.jpg',
+  '/beyond_ice_8.jpg',
+  '/beyond_ice_9.jpg',
+  '/beyond_ice_10.jpg'
+];
+
+// Trip Schedule Data
+const TRIP_SCHEDULE = [
+  {
+    date: 'Monday, Apr 13',
+    day: 'Mon',
+    dayNum: '13',
+    activities: [
+      { time: '5pm', description: 'Departure from Pearson Airport (red-eye flight with 1 layover)', type: 'departure' }
+    ]
+  },
+  {
+    date: 'Tuesday, Apr 14',
+    day: 'Tue',
+    dayNum: '14',
+    activities: [
+      { time: '1pm', description: 'Arrival at Riga Airport', type: 'arrival' },
+      { time: '', description: 'Transfer to hotel', type: 'transfer' },
+      { time: '', description: 'No events for rest of the day', type: 'free' }
+    ]
+  },
+  {
+    date: 'Wednesday, Apr 15',
+    day: 'Wed',
+    dayNum: '15',
+    activities: [
+      { time: '7am', description: 'Breakfast', type: 'meal' },
+      { time: '10am', description: 'Guided Tour', type: 'tour' },
+      { time: '3:30pm', description: 'Transfer to Rink', type: 'transfer' },
+      { time: '5pm', description: 'Game / Practice', type: 'game' },
+      { time: '7pm', description: 'Transfer to Hotel', type: 'transfer' }
+    ]
+  },
+  {
+    date: 'Thursday, Apr 16',
+    day: 'Thu',
+    dayNum: '16',
+    activities: [
+      { time: '7am', description: 'Breakfast', type: 'meal' },
+      { time: '10am', description: 'Guided Tour', type: 'tour' },
+      { time: '3:30pm', description: 'Transfer to Rink', type: 'transfer' },
+      { time: '5pm', description: 'Game / Practice', type: 'game' },
+      { time: '7pm', description: 'Transfer to Hotel', type: 'transfer' }
+    ]
+  },
+  {
+    date: 'Friday, Apr 17',
+    day: 'Fri',
+    dayNum: '17',
+    tournament: true,
+    tournamentDay: 'Tournament Day 1',
+    activities: [
+      { time: '', description: 'Agenda for the Day TBD based on Tournament Schedule', type: 'tournament' },
+      { time: '', description: '3 games expected', type: 'tournament' }
+    ]
+  },
+  {
+    date: 'Saturday, Apr 18',
+    day: 'Sat',
+    dayNum: '18',
+    tournament: true,
+    tournamentDay: 'Tournament Day 2',
+    activities: [
+      { time: '', description: 'Agenda for the Day TBD based on Tournament Schedule', type: 'tournament' },
+      { time: '', description: '2/3 games expected', type: 'tournament' }
+    ]
+  },
+  {
+    date: 'Sunday, Apr 19',
+    day: 'Sun',
+    dayNum: '19',
+    tournament: true,
+    tournamentDay: 'Tournament Day 3 (Final)',
+    activities: [
+      { time: '', description: 'Agenda for the Day TBD based on Tournament Schedule', type: 'tournament' },
+      { time: '', description: '2/3 games expected', type: 'tournament' },
+      { time: '', description: 'Team Dinner - Latvian Traditional Cuisine', type: 'meal' }
+    ]
+  },
+  {
+    date: 'Monday, Apr 20',
+    day: 'Mon',
+    dayNum: '20',
+    activities: [
+      { time: '7am', description: 'Breakfast', type: 'meal' },
+      { time: '9am', description: 'Transfer to Airport', type: 'transfer' },
+      { time: '11:30am', description: 'Departure', type: 'departure' },
+      { time: '4pm', description: 'Arrival in Toronto with 1 layover', type: 'arrival' }
+    ]
+  }
+];
+
 const App: React.FC = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(nextImage, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: containerRef });
   const isMobile = useMobile();
-  
+
   // Parallax for Hero
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 100]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedDivision, setSelectedDivision] = useState<Artist | null>(null);
-  
+  const [subCarouselIndex, setSubCarouselIndex] = useState(0);
+
+  // Reset sub-carousel index when division changes
+  useEffect(() => {
+    setSubCarouselIndex(0);
+  }, [selectedDivision?.id]);
+
+  // Auto-cycle arena images
+  useEffect(() => {
+    if (!selectedDivision?.images || selectedDivision.images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setSubCarouselIndex((prev) => (prev + 1) % (selectedDivision.images?.length || 1));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [selectedDivision, subCarouselIndex]);
+
   const [purchasingIndex, setPurchasingIndex] = useState<number | null>(null);
   const [purchasedIndex, setPurchasedIndex] = useState<number | null>(null);
+  // Registration State
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  // Admin State
+  const [adminLoginOpen, setAdminLoginOpen] = useState(false);
+  const [adminDashboardOpen, setAdminDashboardOpen] = useState(false);
+  const [adminToken, setAdminToken] = useState<string | null>(null);
+
+  const handleAdminLoginSuccess = (token: string) => {
+    setAdminToken(token);
+    setAdminLoginOpen(false);
+    setAdminDashboardOpen(true);
+  };
+
+  const handleAdminLogout = () => {
+    setAdminToken(null);
+    setAdminDashboardOpen(false);
+  };
 
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -79,11 +298,13 @@ const App: React.FC = () => {
   }, [selectedDivision]);
 
   const handlePurchase = (index: number) => {
-    setPurchasingIndex(index);
-    setTimeout(() => {
-      setPurchasingIndex(null);
-      setPurchasedIndex(index);
-    }, 2000);
+    // Pricing cards were replaced by inline form, so this is now a no-op 
+    // or can be used for analytics in the future.
+  };
+
+  const handleCommitmentSubmit = (data: CommitmentFormData) => {
+    // Backend call is already handled inside CommitmentForm
+    setIsRegistered(true);
   };
 
   const scrollToSection = (id: string) => {
@@ -105,22 +326,124 @@ const App: React.FC = () => {
     }
     setSelectedDivision(DIVISIONS[nextIndex]);
   };
-  
+
+  const REGISTRATION_PACKAGES = [
+    {
+      name: "Free Agent",
+      price: "$150",
+      features: [
+        "Individual Player Entry",
+        "Full Tournament Access",
+        "EHD Jersey Included",
+        "Player Profile"
+      ],
+      accent: "from-white/20 to-white/5",
+      textShadow: "shadow-white/20"
+    },
+    {
+      name: "Team Entry",
+      price: "$2500",
+      features: [
+        "Full Team Registration",
+        "Up to 17 Players + 2 Coaches",
+        "Priority Scheduling",
+        "Team Media Package"
+      ],
+      accent: "from-[#4fb7b3]/20 to-[#4fb7b3]/5",
+      textShadow: "shadow-[#4fb7b3]/20",
+      popular: true
+    },
+    {
+      name: "Corporate",
+      price: "Custom",
+      features: [
+        "Brand Integration",
+        "VIP Arena Lounge",
+        "Sponsor Recognition",
+        "B2B Networking"
+      ],
+      accent: "from-[#637ab9]/20 to-[#637ab9]/5",
+      textShadow: "shadow-[#637ab9]/20"
+    }
+  ];
+
+  // SECTION: REGISTRATION SECTION
+  const RegistrationSection = () => {
+    return (
+      <section id="register" className="relative min-h-screen py-32 px-4 md:px-10 flex flex-col justify-center snap-start bg-[#0a0b1a]">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="flex flex-col items-center mb-16 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-4"
+            >
+              <GradientText
+                text="REGISTER"
+                className="text-6xl md:text-8xl font-heading font-black tracking-tighter"
+              />
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-gray-400 max-w-2xl font-mono text-sm uppercase tracking-widest"
+            >
+              Secure your spot in the EHD x RHC 2026 Spring Tour.
+            </motion.p>
+          </div>
+
+          <div className="relative">
+            {!isRegistered ? (
+              <CommitmentForm
+                onSubmit={handleCommitmentSubmit}
+                isInline={true}
+              />
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="max-w-4xl mx-auto bg-[#1a1b3b] border border-[#4fb7b3]/30 rounded-2xl p-12 text-center shadow-2xl shadow-[#4fb7b3]/10"
+              >
+                <div className="p-4 rounded-full bg-[#4fb7b3]/20 border border-[#4fb7b3]/30 w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <Trophy className="w-10 h-10 text-[#4fb7b3]" />
+                </div>
+                <h3 className="text-3xl font-heading font-bold text-white mb-4 uppercase tracking-widest">
+                  Interest Registered!
+                </h3>
+                <p className="text-gray-400 font-mono text-lg mb-8">
+                  Thank you for your interest in the EHD x RHC 2026 Spring Tour. Our team will contact you shortly with further details.
+                </p>
+                <button
+                  onClick={() => setIsRegistered(false)}
+                  className="px-8 py-3 border border-white/20 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-white hover:text-black transition-all"
+                >
+                  Register Another Player
+                </button>
+              </motion.div>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  };
+
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className={`relative h-screen w-full overflow-y-scroll overflow-x-hidden bg-transparent text-white scroll-smooth ${!isMobile ? 'snap-y snap-mandatory' : ''}`}
     >
       <FluidBackground />
-      <AIChat />
-      
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center px-4 md:px-8 py-4 md:py-6 pointer-events-none">
         {/* Desktop Menu - Centered Pill */}
         <div className="hidden md:flex items-center gap-1 p-1.5 bg-black/30 backdrop-blur-xl border border-white/10 rounded-full pointer-events-auto shadow-2xl shadow-black/20 transform hover:scale-[1.02] transition-transform duration-300">
-          {['Tournament', 'Experience', 'Register'].map((item) => (
-            <button 
-              key={item} 
+          {['Tournament', 'Agenda', 'Experience', 'Register'].map((item) => (
+            <button
+              key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
               className="relative px-6 py-2.5 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase text-white/80 hover:text-white transition-all duration-300 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] border border-transparent hover:border-white/5"
               data-hover="true"
@@ -129,13 +452,13 @@ const App: React.FC = () => {
             </button>
           ))}
         </div>
-        
+
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className="md:hidden text-white absolute right-6 top-6 z-50 w-10 h-10 flex items-center justify-center pointer-events-auto bg-black/20 backdrop-blur-md rounded-full border border-white/10"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
@@ -148,7 +471,7 @@ const App: React.FC = () => {
             exit={{ opacity: 0, x: '100%' }}
             className="fixed inset-0 z-40 bg-[#1a1b3b] backdrop-blur-2xl flex flex-col items-center justify-center gap-8 md:hidden"
           >
-            {['Tournament', 'Experience', 'Register'].map((item) => (
+            {['Tournament', 'Agenda', 'Experience', 'Register'].map((item) => (
               <button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase())}
@@ -157,7 +480,7 @@ const App: React.FC = () => {
                 {item}
               </button>
             ))}
-            <button 
+            <button
               onClick={() => scrollToSection('register')}
               className="mt-8 border border-[#4fb7b3] px-10 py-4 text-sm font-bold tracking-widest uppercase bg-[#4fb7b3] text-black shadow-[0_0_20px_rgba(79,183,179,0.3)]"
             >
@@ -169,60 +492,118 @@ const App: React.FC = () => {
 
       {/* HERO SECTION */}
       <header className={`relative h-screen w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 ${!isMobile ? 'snap-start' : ''}`}>
-        <motion.div 
+        <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="z-10 text-center flex flex-col items-center w-full max-w-7xl pb-16 md:pb-12"
+          className="z-10 text-center flex flex-col items-center w-full max-w-screen-2xl pb-8 md:pb-8"
         >
-           {/* Date / Location */}
+          {/* Logos */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.1 }}
+            className="flex items-center gap-8 md:gap-16 mb-4 md:mb-6"
+          >
+            <img src="/ehd_logo_user_v5.png" alt="EHD Logo" className="h-72 md:h-120 object-contain drop-shadow-2xl" />
+
+            {/* Animated crossed lines separator */}
+            <motion.div
+              className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center"
+            >
+              <motion.div
+                className="absolute w-full h-0.5 bg-gradient-to-r from-[#4fb7b3] to-[#a8fbd3] shadow-lg"
+                style={{ transform: 'rotate(45deg)' }}
+                animate={{
+                  opacity: [0.4, 0.4, 1, 1, 0.4],
+                  boxShadow: [
+                    '0 0 5px rgba(79, 183, 179, 0.3)',
+                    '0 0 5px rgba(79, 183, 179, 0.3)',
+                    '0 0 20px rgba(79, 183, 179, 0.8), 0 0 40px rgba(168, 251, 211, 0.6)',
+                    '0 0 20px rgba(79, 183, 179, 0.8), 0 0 40px rgba(168, 251, 211, 0.6)',
+                    '0 0 5px rgba(79, 183, 179, 0.3)'
+                  ]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  times: [0, 0.4, 0.5, 0.6, 1]
+                }}
+              />
+              <motion.div
+                className="absolute w-full h-0.5 bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3] shadow-lg"
+                style={{ transform: 'rotate(-45deg)' }}
+                animate={{
+                  opacity: [0.4, 0.4, 1, 1, 0.4],
+                  boxShadow: [
+                    '0 0 5px rgba(168, 251, 211, 0.3)',
+                    '0 0 5px rgba(168, 251, 211, 0.3)',
+                    '0 0 20px rgba(168, 251, 211, 0.8), 0 0 40px rgba(79, 183, 179, 0.6)',
+                    '0 0 20px rgba(168, 251, 211, 0.8), 0 0 40px rgba(79, 183, 179, 0.6)',
+                    '0 0 5px rgba(168, 251, 211, 0.3)'
+                  ]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  times: [0, 0.4, 0.5, 0.6, 1]
+                }}
+              />
+            </motion.div>
+
+            <img src="/rhc_logo_latest.png" alt="RHC Logo" className="h-72 md:h-120 object-contain drop-shadow-2xl mix-blend-screen" />
+          </motion.div>
+
+          {/* Date / Location */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-[10px] md:text-sm font-mono text-[#a8fbd3] tracking-[0.2em] md:tracking-[0.2em] uppercase mb-6 bg-black/30 px-5 py-3 rounded-full backdrop-blur-md border border-white/5"
+            className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-[10px] md:text-sm font-mono text-[#a8fbd3] tracking-[0.2em] md:tracking-[0.2em] uppercase mb-3 md:mb-4 bg-black/30 px-5 py-3 rounded-full backdrop-blur-md border border-white/5"
           >
             <span className="font-bold text-white">Riga, Latvia</span>
-            <span className="hidden md:block w-1.5 h-1.5 bg-[#4fb7b3] rounded-full animate-pulse"/>
-            <span className="text-center">Travel Dates Apr 13-20, 2026 | Tournament: Apr 17-19, 2026</span>
+            <span className="hidden md:block w-1.5 h-1.5 bg-[#4fb7b3] rounded-full animate-pulse" />
+            <span className="text-center">U14 (born 2012) AA/AAA | Travel Dates Apr 13-20, 2026 | Tournament: Apr 17-19, 2026</span>
           </motion.div>
 
           {/* Main Title */}
           <div className="relative w-full flex justify-center items-center px-2">
-            <GradientText 
-              text="Riga Hockey Cup 2026" 
-              as="h1" 
-              className="text-[12vw] md:text-[6.5vw] leading-[0.9] font-black tracking-tighter text-center" 
+            <GradientText
+              text="Riga Hockey Cup 2026"
+              as="h1"
+              className="text-[6.5vw] md:text-[5vw] leading-[0.9] font-black tracking-tighter text-center whitespace-nowrap"
             />
-            <motion.div 
-               className="absolute -z-20 w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] bg-white/5 blur-[40px] rounded-full pointer-events-none will-change-transform"
-               animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.3, 0.6, 0.3] }}
-               transition={{ duration: 6, repeat: Infinity }}
-               style={{ transform: 'translateZ(0)' }}
+            <motion.div
+              className="absolute -z-20 w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] bg-white/5 blur-[40px] rounded-full pointer-events-none will-change-transform"
+              animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 6, repeat: Infinity }}
+              style={{ transform: 'translateZ(0)' }}
             />
           </div>
-          
+
           <motion.div
-             initial={{ scaleX: 0 }}
-             animate={{ scaleX: 1 }}
-             transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-             className="w-full max-w-sm h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mt-4 md:mt-6 mb-8 md:mb-8"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
+            className="w-full max-w-sm h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mt-3 md:mt-4 mb-4 md:mb-5"
           />
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="text-sm md:text-2xl font-light max-w-4xl mx-auto text-white/90 leading-relaxed drop-shadow-lg px-6 mb-10 md:mb-10"
+            className="text-sm md:text-xl font-light max-w-screen-2xl mx-auto text-white/90 leading-relaxed drop-shadow-lg px-6 mb-6 md:mb-8"
           >
-            The EHD Spring Tour presents the ultimate international showdown. Competing nations include USA, Canada, Sweden, Finland, Czechia, and Switzerland. Join elite teams for world-class competition in Latvia.
+            Celebrate the 20th Anniversary of Europe’s largest youth ice hockey tournament! The EHD Spring Tour invites you to Riga, Latvia, for an elite competition featuring top talent from Europe's hockey powerhouses such as Sweden, Finland, Czechia, Switzerland amongst others. Join over 250 teams for world-class hockey and an unforgettable international experience in one of Europe’s most passionate hockey cities.
           </motion.p>
-          
+
           {/* Main CTA Button */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            transition={{ 
+            transition={{
               opacity: { delay: 1, duration: 1 },
               y: { delay: 1, duration: 1 },
               scale: { duration: 0.2, ease: "easeInOut" }
@@ -239,7 +620,7 @@ const App: React.FC = () => {
 
         {/* MARQUEE */}
         <div className="absolute bottom-4 md:bottom-12 left-0 w-full py-2 md:py-4 bg-white text-black z-20 overflow-hidden border-y-2 md:border-y-4 border-black shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-          <motion.div 
+          <motion.div
             className="flex w-fit will-change-transform"
             animate={{ x: "-50%" }}
             transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
@@ -248,7 +629,7 @@ const App: React.FC = () => {
               <div key={key} className="flex whitespace-nowrap shrink-0">
                 {[...Array(2)].map((_, i) => (
                   <span key={i} className="text-sm md:text-3xl font-heading font-black px-4 md:px-6 flex items-center gap-3">
-                    EHD Spring Tour x Riga Hockey Cup 2026 | Travel Date: April 13 to April 20 <span className="text-black text-xs md:text-3xl">●</span> 
+                    EHD Spring Tour x Riga Hockey Cup 2026 | U14 (born 2012) AA/AAA | Travel Date: April 13 to April 20 <span className="text-black text-xs md:text-3xl">●</span>
                   </span>
                 ))}
               </div>
@@ -261,8 +642,8 @@ const App: React.FC = () => {
       <section id="tournament" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-8 md:py-20 px-4 ${!isMobile ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-4 md:mb-12 px-2">
-             <h2 className="text-2xl md:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg break-words w-full md:w-auto">
-              Experience the Class and Skill of <br/> 
+            <h2 className="text-2xl md:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg break-words w-full md:w-auto">
+              Experience the Class and Skill of <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
             </h2>
           </div>
@@ -275,6 +656,148 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* AGENDA SECTION */}
+      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 px-4 bg-black/10 backdrop-blur-sm border-t border-white/10 ${!isMobile ? 'snap-start' : ''}`}>
+        <div className="max-w-7xl w-full mx-auto px-4 md:px-6">
+          {/* Section Header */}
+          <div className="text-center mb-8 md:mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-7xl font-heading font-bold mb-4 uppercase">
+                Trip <GradientText text="Agenda" className="text-4xl md:text-7xl" />
+              </h2>
+              <p className="text-[#a8fbd3] font-mono uppercase tracking-widest text-xs md:text-sm mb-4">
+                April 13-20, 2026
+              </p>
+              <div className="max-w-3xl mx-auto px-4 py-3 bg-white/5 border border-white/10 rounded-xl backdrop-blur-md">
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+                  <span className="font-bold text-[#4fb7b3]">Sample Itinerary:</span> This is a preliminary schedule. The finalized version will be provided <span className="font-bold text-white">1 month prior to travel</span>.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Compact Timeline Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+            {TRIP_SCHEDULE.map((day, dayIndex) => {
+              // Helper function to get icon based on activity type and description
+              const getIcon = (type: string, description: string) => {
+                switch (type) {
+                  case 'departure':
+                  case 'arrival':
+                    return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
+                  case 'transfer':
+                    // Check if it's airport transfer or local transfer
+                    if (description.toLowerCase().includes('airport')) {
+                      return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
+                    } else {
+                      return <Bus className="w-4 h-4 md:w-5 md:h-5" />;
+                    }
+                  case 'game':
+                    return <Activity className="w-4 h-4 md:w-5 md:h-5" />;
+                  case 'meal':
+                    return <Utensils className="w-4 h-4 md:w-5 md:h-5" />;
+                  case 'tour':
+                    return <MapPinned className="w-4 h-4 md:w-5 md:h-5" />;
+                  case 'tournament':
+                    return <Trophy className="w-4 h-4 md:w-5 md:h-5" />;
+                  case 'free':
+                    return <Hotel className="w-4 h-4 md:w-5 md:h-5" />;
+                  default:
+                    return <Calendar className="w-4 h-4 md:w-5 md:h-5" />;
+                }
+              };
+
+              return (
+                <motion.div
+                  key={dayIndex}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: dayIndex * 0.05 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  whileHover={{ y: -3 }}
+                  className={`group relative p-5 md:p-6 rounded-xl border backdrop-blur-md transition-all duration-300 ${day.tournament
+                    ? 'bg-gradient-to-br from-[#4fb7b3]/20 to-[#637ab9]/20 border-[#4fb7b3]/30 hover:border-[#4fb7b3]/50 hover:bg-[#4fb7b3]/20 shadow-lg shadow-[#4fb7b3]/10'
+                    : 'bg-white/10 border-white/10 hover:border-white/20 hover:bg-white/15'
+                    }`}
+                >
+                  {/* Day Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-lg ${day.tournament
+                        ? 'bg-gradient-to-br from-[#a8fbd3] to-[#4fb7b3] text-black'
+                        : 'bg-white/10 text-[#a8fbd3]'
+                        }`}>
+                        <div className="text-center leading-none">
+                          <div className="text-[9px] md:text-[10px] font-mono uppercase opacity-80 font-bold">
+                            {day.day}
+                          </div>
+                          <div className="text-base md:text-lg font-bold">
+                            {day.dayNum}
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-base md:text-lg font-heading font-bold text-white tracking-wide">
+                          {day.date.replace(/,.*/, '')}
+                        </h3>
+                        <p className="text-xs md:text-sm text-gray-300 font-medium">
+                          {day.date.match(/,\s*(.*)$/)?.[1]}
+                        </p>
+                      </div>
+                    </div>
+                    {day.tournament && (
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#a8fbd3]/20 border border-[#a8fbd3]/40 rounded-full">
+                        <Trophy className="w-3 h-3 md:w-4 md:h-4 text-[#a8fbd3]" />
+                        <span className="text-[10px] md:text-xs font-bold text-[#a8fbd3] uppercase tracking-wide">
+                          {day.tournamentDay?.replace('Tournament ', '')}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Activities */}
+                  <div className="space-y-4">
+                    {day.activities.map((activity, actIndex) => (
+                      <div
+                        key={actIndex}
+                        className="flex items-start gap-3"
+                      >
+                        <div className={`shrink-0 mt-1 ${day.tournament ? 'text-[#a8fbd3]' : 'text-gray-400'
+                          }`}>
+                          {getIcon(activity.type, activity.description)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm md:text-base leading-snug text-gray-200 font-medium">
+                            {activity.time && (
+                              <span className="font-mono font-bold text-white mr-2">
+                                {activity.time}
+                              </span>
+                            )}
+                            <span className={day.tournament ? 'text-white' : 'text-gray-200'}>
+                              {activity.description}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Tournament Day Badge Overlay */}
+                  {day.tournament && (
+                    <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#a8fbd3] to-[#4fb7b3] rounded-l-xl" />
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* EXPERIENCE SECTION */}
       <section id="experience" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 bg-black/20 backdrop-blur-sm border-t border-white/10 overflow-hidden ${!isMobile ? 'snap-start' : ''}`}>
         <div className="absolute top-1/2 right-[-20%] w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] bg-[#4fb7b3]/20 rounded-full blur-[40px] pointer-events-none will-change-transform" style={{ transform: 'translateZ(0)' }} />
@@ -283,20 +806,20 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center">
             <div className="lg:col-span-5 order-2 lg:order-1">
               <h2 className="text-3xl md:text-6xl font-heading font-bold mb-6 leading-tight">
-                Beyond <br/> <GradientText text="THE ICE" className="text-4xl md:text-7xl" />
+                Beyond <br /> <GradientText text="THE ICE" className="text-4xl md:text-7xl" />
               </h2>
               <p className="text-base md:text-lg text-gray-200 mb-8 font-light leading-relaxed drop-shadow-md">
-                RHC isn't just a tournament; it's a celebration of hockey culture. We combine elite competition with a festival atmosphere.
+                Experience the "Culture Capital of the Baltics." Beyond the world-class hockey, Riga is an architectural pearl where 800 years of Gothic, Medieval, and Art Nouveau history meet the pulse of modern European life.
               </p>
-              
+
               <div className="space-y-6 md:space-y-6">
                 {[
-                  { icon: Shield, title: 'Pro Conditions', desc: 'NHL-regulation ice maintenance and facilities.' },
-                  { icon: Users, title: 'Draft Party', desc: 'Friday night team selection and networking event.' },
-                  { icon: Trophy, title: 'Championship Sunday', desc: 'Televised finals with trophy ceremony.' },
+                  { icon: Shield, title: 'Architectural Pearl', desc: 'Explore 800 years of heritage, from Gothic cathedrals to exquisite Art Nouveau.' },
+                  { icon: Zap, title: 'Capital of Gastronomy', desc: 'A fusion of traditional Latvian meals and astonishing modern combinations.' },
+                  { icon: Activity, title: 'Wellness & Culture', desc: 'Indulge in premier SPA treatments and the traditional Latvian bath experience.' },
                 ].map((feature, i) => (
                   <div
-                    key={i} 
+                    key={i}
                     className="flex items-start gap-4"
                   >
                     <div className="p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/5">
@@ -311,30 +834,66 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-7 relative h-[300px] md:h-[500px] w-full order-1 lg:order-2">
+            <div className="lg:col-span-7 relative h-[400px] md:h-[600px] w-full order-1 lg:order-2">
               <div className="absolute inset-0 bg-gradient-to-br from-[#637ab9] to-[#4fb7b3] rounded-2xl rotate-3 opacity-30 blur-xl" />
               <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 group shadow-2xl bg-black/40">
-                <img 
-                  src="https://images.unsplash.com/photo-1563714272138-76c253b7c7b8?q=80&w=2000&auto=format&fit=crop" 
-                  alt="Riga Skyline" 
-                  className="h-full w-full object-cover object-center transition-transform duration-[1.5s] group-hover:scale-110 will-change-transform"
-                  onLoad={(e) => (e.currentTarget.style.opacity = '1')}
-                  style={{ opacity: 0, transition: 'opacity 0.5s ease-in-out' }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-                
-                {/* RHC Badge Overlay Simulation */}
-                <div className="absolute top-6 right-6 md:top-8 md:right-8 group-hover:scale-110 transition-transform duration-500">
-                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-[#1a1b3b]/90 backdrop-blur-xl border-2 border-[#4fb7b3] flex flex-col items-center justify-center p-2 shadow-[0_0_30px_rgba(79,183,179,0.3)]">
-                    <div className="text-[8px] md:text-[10px] font-bold text-[#a8fbd3] uppercase text-center leading-tight mb-1">Europe's<br/>Largest</div>
-                    <div className="text-lg md:text-2xl font-heading font-black text-white leading-none tracking-tighter">RHC</div>
-                    <div className="text-[8px] md:text-[10px] font-bold text-[#a8fbd3] uppercase tracking-widest mt-1">2026</div>
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentImageIndex}
+                    src={CAROUSEL_IMAGES[currentImageIndex]}
+                    alt={`Experience ${currentImageIndex + 1}`}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                    className="absolute inset-0 h-full w-full object-cover object-center will-change-transform"
+                  />
+                </AnimatePresence>
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+
+                {/* Navigation Controls */}
+                <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 flex items-center justify-between z-10">
+                  <div className="flex gap-2">
+                    {CAROUSEL_IMAGES.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentImageIndex(i)}
+                        className={`h-1.5 rounded-full transition-all duration-500 ${currentImageIndex === i ? 'bg-[#a8fbd3] w-8' : 'bg-white/30 hover:bg-white/50 w-2'
+                          }`}
+                        aria-label={`Go to slide ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                      className="p-3 rounded-full bg-black/20 backdrop-blur-xl border border-white/10 hover:bg-black/40 hover:border-[#a8fbd3]/50 transition-all duration-300"
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-white" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                      className="p-3 rounded-full bg-black/20 backdrop-blur-xl border border-white/10 hover:bg-black/40 hover:border-[#a8fbd3]/50 transition-all duration-300"
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight className="w-5 h-5 text-white" />
+                    </button>
                   </div>
                 </div>
 
-                <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8">
-                  <div className="text-base md:text-lg font-bold tracking-widest uppercase mt-1 text-white opacity-80">
-                    26 Teams Competing
+                <div className="absolute top-6 left-6 md:top-8 md:left-8">
+                  <div className="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
+                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#a8fbd3]">
+                      Riga Experience
+                    </span>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-20 left-6 md:bottom-24 md:left-8">
+                  <div className="text-base md:text-lg font-bold tracking-widest uppercase text-white/90 drop-shadow-lg">
+                    {currentImageIndex === 0 ? 'City Landmark' : 'Cultural Vibes'}
                   </div>
                 </div>
               </div>
@@ -344,108 +903,36 @@ const App: React.FC = () => {
       </section>
 
       {/* REGISTER SECTION */}
-      <section id="register" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 px-6 bg-black/30 backdrop-blur-lg ${!isMobile ? 'snap-start' : ''}`}>
-        <div className="max-w-6xl w-full mx-auto">
-          <div className="text-center mb-10 md:mb-16">
-             <h2 className="text-5xl md:text-8xl font-heading font-bold opacity-20 text-white">
-               JOIN
-             </h2>
-             <p className="text-[#a8fbd3] font-mono uppercase tracking-widest -mt-4 md:-mt-6 relative z-10 text-xs md:text-sm">
-               Secure your spot on the roster
-             </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-            {[
-              { name: 'Free Agent', price: '$150', color: 'white', accent: 'bg-white/5' },
-              { name: 'Team Entry', price: '$2500', color: 'teal', accent: 'bg-[#4fb7b3]/10 border-[#4fb7b3]/50' },
-              { name: 'Corporate', price: 'Partner', color: 'periwinkle', accent: 'bg-[#637ab9]/10 border-[#637ab9]/50' },
-            ].map((ticket, i) => {
-              const isPurchasing = purchasingIndex === i;
-              const isPurchased = purchasedIndex === i;
-              const isDisabled = (purchasingIndex !== null) || (purchasedIndex !== null);
+      <RegistrationSection />
 
-              return (
-                <motion.div
-                  key={i}
-                  whileHover={isDisabled || isMobile ? {} : { y: -10 }}
-                  className={`relative p-8 md:p-8 border border-white/10 backdrop-blur-md flex flex-col min-h-[350px] md:min-h-[450px] transition-colors duration-300 ${ticket.accent} ${isDisabled && !isPurchased ? 'opacity-50 grayscale' : ''} will-change-transform`}
-                  data-hover={!isDisabled}
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                  
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-heading font-bold mb-2 text-white">{ticket.name}</h3>
-                    <div className={`text-4xl md:text-5xl font-bold mb-8 tracking-tighter ${ticket.color === 'white' ? 'text-white' : ticket.color === 'teal' ? 'text-[#4fb7b3]' : 'text-[#637ab9]'}`}>
-                      {ticket.price}
-                    </div>
-                    <ul className="space-y-4 text-sm text-gray-200">
-                      <li className="flex items-center gap-3"><Activity className="w-4 h-4 text-gray-400" /> Minimum 4 Games</li>
-                      <li className="flex items-center gap-3"><Target className="w-4 h-4 text-gray-400" /> Stats & Tracking</li>
-                      {i > 0 && <li className="flex items-center gap-3 text-white"><Zap className={`w-4 h-4 text-[#a8fbd3]`} /> Custom Jerseys</li>}
-                      {i > 1 && <li className="flex items-center gap-3 text-white"><Users className={`w-4 h-4 text-[#4fb7b3]`} /> Brand Activation</li>}
-                    </ul>
-                  </div>
-                  
-                  <button 
-                    onClick={() => handlePurchase(i)}
-                    disabled={isDisabled}
-                    className={`w-full py-4 text-xs font-bold uppercase tracking-[0.2em] border border-white/20 transition-all duration-300 mt-8 group overflow-hidden relative 
-                      ${isPurchased 
-                        ? 'bg-[#a8fbd3] text-black border-[#a8fbd3] cursor-default' 
-                        : isPurchasing 
-                          ? 'bg-white/20 text-white cursor-wait'
-                          : isDisabled 
-                            ? 'cursor-not-allowed opacity-50' 
-                            : 'text-white cursor-pointer hover:bg-white hover:text-black'
-                      }`}
-                  >
-                    <span className="relative z-10">
-                      {isPurchasing ? 'Processing...' : isPurchased ? 'Registered' : 'Register Interest'}
-                    </span>
-                    {!isDisabled && !isPurchased && !isPurchasing && (
-                      <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out -z-0" />
-                    )}
-                  </button>
-                  
-                  {isPurchased && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-[10px] text-center mt-2 text-white/40 font-mono"
-                    >
-                      Interest registered for www.rhc.com
-                    </motion.p>
-                  )}
-                </motion.div>
-              );
-            })}
+      <footer className="w-full border-t border-white/10 py-12 md:py-12 bg-black/80 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
+          <div>
+            <div className="font-heading text-2xl md:text-3xl font-bold tracking-tighter mb-2 text-white">RHC INVITE</div>
+            <div className="flex gap-2 text-[10px] font-mono text-gray-400">
+              <span>Official Registration Portal</span>
+            </div>
+          </div>
+
+          <div className="flex gap-8 flex-wrap">
+            <button
+              onClick={() => setAdminLoginOpen(true)}
+              className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
+            >
+              Admin
+            </button>
+            <a href="https://x.com/GoogleAIStudio" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
+              Twitter
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
+              Rules
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
+              Contact
+            </a>
           </div>
         </div>
-        
-        <footer className="w-full border-t border-white/10 py-12 md:py-12 bg-black/80 backdrop-blur-xl">
-          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-            <div>
-               <div className="font-heading text-2xl md:text-3xl font-bold tracking-tighter mb-2 text-white">RHC INVITE</div>
-               <div className="flex gap-2 text-[10px] font-mono text-gray-400">
-                 <span>Official Registration Portal</span>
-               </div>
-            </div>
-            
-            <div className="flex gap-8 flex-wrap">
-              <a href="https://x.com/GoogleAIStudio" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
-                Twitter
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
-                Rules
-              </a>
-               <a href="#" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
-                Contact
-              </a>
-            </div>
-          </div>
-        </footer>
-      </section>
+      </footer>
 
 
       {/* Division Detail Modal */}
@@ -477,50 +964,92 @@ const App: React.FC = () => {
               {/* Image Side - Fixed on Desktop */}
               <div className="w-full md:w-1/2 h-48 md:h-full relative overflow-hidden shrink-0">
                 <AnimatePresence mode="wait">
-                  <motion.img 
-                    key={selectedDivision.id}
-                    src={selectedDivision.image} 
-                    alt={selectedDivision.name} 
-                    initial={{ opacity: 0, scale: 1.1 }}
+                  <motion.img
+                    key={`${selectedDivision.id}-${subCarouselIndex}`}
+                    src={selectedDivision.images && selectedDivision.images.length > 0
+                      ? selectedDivision.images[subCarouselIndex]
+                      : selectedDivision.image}
+                    alt={selectedDivision.name}
+                    initial={{ opacity: 0, scale: 1.05 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.5 }}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 </AnimatePresence>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1a1b3b] via-transparent to-transparent md:bg-gradient-to-r md:from-[#1a1b3b]/80" />
-                
+
+                {/* Sub-carousel navigation */}
+                {selectedDivision.images && selectedDivision.images.length > 1 && (
+                  <>
+                    <div className="absolute inset-x-0 bottom-6 flex justify-center gap-1.5 z-20">
+                      {selectedDivision.images.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={(e) => { e.stopPropagation(); setSubCarouselIndex(idx); }}
+                          className={`h-1 rounded-full transition-all duration-300 ${subCarouselIndex === idx ? 'bg-[#a8fbd3] w-6' : 'bg-white/20 w-2 hover:bg-white/40'}`}
+                        />
+                      ))}
+                    </div>
+                    <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 z-20 pointer-events-none">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSubCarouselIndex(prev => (prev - 1 + (selectedDivision.images?.length || 0)) % (selectedDivision.images?.length || 1));
+                        }}
+                        className="p-3 rounded-full bg-[#4fb7b3] shadow-lg shadow-[#4fb7b3]/20 border border-white/10 text-black hover:bg-white hover:scale-110 transition-all pointer-events-auto"
+                      >
+                        <ChevronLeft className="w-6 h-6" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSubCarouselIndex(prev => (prev + 1) % (selectedDivision.images?.length || 1));
+                        }}
+                        className="p-3 rounded-full bg-[#4fb7b3] shadow-lg shadow-[#4fb7b3]/20 border border-white/10 text-black hover:bg-white hover:scale-110 transition-all pointer-events-auto"
+                      >
+                        <ChevronRight className="w-6 h-6" />
+                      </button>
+                    </div>
+                  </>
+                )}
+
                 {/* Mobile Title Overlay */}
                 <div className="absolute bottom-4 left-6 md:hidden">
-                    <h3 className="text-3xl font-heading font-bold uppercase leading-none text-white drop-shadow-md">
-                        {selectedDivision.name}
-                    </h3>
+                  <h3 className="text-3xl font-heading font-bold uppercase leading-none text-white drop-shadow-md">
+                    {selectedDivision.name}
+                  </h3>
                 </div>
               </div>
 
               {/* Content Side - Scrollable */}
               <div className="w-full md:w-1/2 h-full overflow-y-auto bg-[#1a1b3b] relative custom-scrollbar">
-                 <div className="absolute bottom-6 right-6 z-20 flex gap-4">
+                {/* Navigation Buttons - Top Center */}
+                <div className="sticky top-0 z-30 flex justify-center pt-6 pb-2 bg-gradient-to-b from-[#1a1b3b] via-[#1a1b3b]/95 to-transparent backdrop-blur-sm">
+                  <div className="flex gap-3 p-1.5 rounded-full bg-black/40 backdrop-blur-xl border border-white/20 shadow-lg shadow-black/20">
                     <button
-                        onClick={(e) => { e.stopPropagation(); navigateDivision('prev'); }}
-                        className="p-3.5 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-sm pointer-events-auto"
-                        data-hover="true"
-                        aria-label="Previous Division"
+                      onClick={(e) => { e.stopPropagation(); navigateDivision('prev'); }}
+                      className="group p-2.5 rounded-full bg-white/5 text-white hover:bg-[#4fb7b3] hover:text-black transition-all duration-300 border border-white/10 hover:border-[#4fb7b3] hover:shadow-[0_0_20px_rgba(79,183,179,0.4)] pointer-events-auto hover:scale-110 active:scale-95"
+                      data-hover="true"
+                      aria-label="Previous Division"
                     >
-                        <ChevronLeft className="w-6 h-6" />
+                      <ChevronLeft className="w-5 h-5 transform group-hover:-translate-x-0.5 transition-transform" />
                     </button>
 
-                    <button
-                        onClick={(e) => { e.stopPropagation(); navigateDivision('next'); }}
-                        className="p-3.5 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur-sm pointer-events-auto"
-                        data-hover="true"
-                        aria-label="Next Division"
-                    >
-                        <ChevronRight className="w-6 h-6" />
-                    </button>
-                 </div>
+                    <div className="w-px bg-white/20 my-1"></div>
 
-                <div className="p-8 md:p-16 flex flex-col min-h-full pb-32">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); navigateDivision('next'); }}
+                      className="group p-2.5 rounded-full bg-white/5 text-white hover:bg-[#4fb7b3] hover:text-black transition-all duration-300 border border-white/10 hover:border-[#4fb7b3] hover:shadow-[0_0_20px_rgba(79,183,179,0.4)] pointer-events-auto hover:scale-110 active:scale-95"
+                      data-hover="true"
+                      aria-label="Next Division"
+                    >
+                      <ChevronRight className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-8 md:p-16 flex flex-col min-h-full pb-32 pt-0">
                   <motion.div
                     key={selectedDivision.id}
                     initial={{ opacity: 0, x: 20 }}
@@ -528,32 +1057,129 @@ const App: React.FC = () => {
                     transition={{ duration: 0.4, delay: 0.1 }}
                   >
                     <div className="hidden md:flex items-center gap-2 text-[#4fb7b3] mb-6">
-                       <Calendar className="w-4 h-4" />
-                       <span className="font-mono text-sm tracking-widest uppercase">{selectedDivision.day}</span>
+                      <Calendar className="w-4 h-4" />
+                      <span className="font-mono text-sm tracking-widest uppercase">{selectedDivision.day}</span>
                     </div>
-                    
+
                     <h3 className="hidden md:block text-5xl lg:text-7xl font-heading font-bold uppercase leading-[0.9] mb-4 text-white">
                       {selectedDivision.name}
                     </h3>
-                    
+
                     <p className="text-lg text-[#a8fbd3] font-medium tracking-widest uppercase mb-8">
                       {selectedDivision.genre}
                     </p>
-                    
+
                     <div className="h-px w-24 bg-white/20 mb-10" />
-                    
+
                     <div className="space-y-6">
-                         {selectedDivision.description.split('\n\n').map((paragraph, i) => (
-                             <motion.p 
-                                key={i} 
-                                className={`text-gray-300 leading-relaxed text-base md:text-lg font-light ${paragraph.includes(':') ? 'text-white font-bold' : ''}`}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 + (i * 0.1), duration: 0.5 }}
-                             >
-                               {paragraph}
-                             </motion.p>
-                         ))}
+                      {selectedDivision.intro && (
+                        <p className="text-gray-300 leading-relaxed text-base md:text-lg font-light mb-8">
+                          {selectedDivision.intro}
+                        </p>
+                      )}
+
+                      {selectedDivision.thrillSection && (
+                        <div className="my-8 bg-white/5 p-6 rounded-xl border border-white/10 backdrop-blur-sm">
+                          <h4 className="text-2xl md:text-3xl font-heading font-bold text-[#a8fbd3] mb-6 tracking-widest uppercase drop-shadow-md">
+                            {selectedDivision.thrillSection.title}{selectedDivision.thrillSection.title.endsWith(':') ? '' : ':'}
+                          </h4>
+                          <ul className="space-y-4">
+                            {selectedDivision.thrillSection.items.map((item, i) => (
+                              <li key={i} className="flex items-start gap-4">
+                                <Star className="w-5 h-5 text-[#4fb7b3] fill-[#4fb7b3] mt-1 shrink-0" />
+                                <span className="text-gray-200 text-base font-light leading-relaxed">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          {selectedDivision.thrillSection.videoLink && (
+                            <a
+                              href={selectedDivision.thrillSection.videoLink.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 mt-6 text-sm md:text-base font-heading font-bold text-[#a8fbd3] tracking-widest uppercase hover:text-white transition-all duration-300 group/link"
+                            >
+                              <Play className="w-4 h-4 fill-current" />
+                              <span className="border-b border-[#a8fbd3] group-hover:border-white transition-colors">{selectedDivision.thrillSection.videoLink.text}</span>
+                            </a>
+                          )}
+                        </div>
+                      )}
+
+                      {selectedDivision.exclusions && (
+                        <div className="my-8">
+                          <h4 className="text-xl md:text-2xl font-heading font-bold text-white mb-6 uppercase drop-shadow-md">
+                            {selectedDivision.exclusions.title}:
+                          </h4>
+                          <ul className="space-y-3">
+                            {selectedDivision.exclusions.items.map((item, i) => (
+                              <li key={i} className="flex items-start gap-3">
+                                <span className="w-1.5 h-1.5 mt-2 rounded-full bg-red-500/80 shrink-0" />
+                                <span className="text-gray-300 text-base font-light leading-relaxed">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {selectedDivision.pricing && (
+                        <div className="my-10 bg-gradient-to-br from-white/10 to-white/5 p-8 rounded-xl border border-white/10 backdrop-blur-sm shadow-xl">
+                          <div className="flex justify-end mb-6">
+                            <span className="px-3 py-1 bg-[#4fb7b3] text-black font-bold text-xs tracking-widest uppercase rounded-full">
+                              {selectedDivision.pricing.title}
+                            </span>
+                          </div>
+                          <div className="space-y-6">
+                            {selectedDivision.pricing.packages.map((pkg, i) => (
+                              <div key={i} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                                <span className="text-white font-medium text-lg tracking-wide">{pkg.name}</span>
+                                <span className="text-2xl md:text-3xl font-heading font-bold text-[#a8fbd3] whitespace-nowrap">{pkg.price}</span>
+                              </div>
+                            ))}
+                          </div>
+                          {selectedDivision.pricing.customText && (
+                            <div className="mt-8 text-center">
+                              <p className="text-[#4fb7b3] font-bold tracking-widest uppercase text-sm">
+                                {selectedDivision.pricing.customText}
+                              </p>
+                            </div>
+                          )}
+                          {selectedDivision.pricing.paymentTerms && (
+                            <div className="mt-6 pt-6 border-t border-white/20">
+                              <p className="text-white text-sm md:text-base leading-relaxed text-center">
+                                <span className="font-bold text-[#a8fbd3]">Payment Terms:</span> {selectedDivision.pricing.paymentTerms}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {selectedDivision.description.split('\n\n').map((paragraph, i) => (
+                        <motion.p
+                          key={i}
+                          className={`text-gray-300 leading-relaxed text-base md:text-lg font-light ${paragraph.includes(':') ? 'text-white font-bold' : ''}`}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.2 + (i * 0.1), duration: 0.5 }}
+                        >
+                          {paragraph}
+                        </motion.p>
+                      ))}
+
+                      {selectedDivision.listItems && (
+                        <motion.ul
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5, duration: 0.5 }}
+                          className="space-y-3 mt-8"
+                        >
+                          {selectedDivision.listItems.map((item, i) => (
+                            <li key={i} className="flex items-start gap-3 text-gray-300">
+                              <span className="w-1.5 h-1.5 mt-2 rounded-full bg-[#4fb7b3] shrink-0" />
+                              <span className="text-base font-light">{item}</span>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      )}
                     </div>
                   </motion.div>
                 </div>
@@ -562,6 +1188,20 @@ const App: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Admin Features */}
+      <AdminLogin
+        isOpen={adminLoginOpen}
+        onClose={() => setAdminLoginOpen(false)}
+        onLoginSuccess={handleAdminLoginSuccess}
+      />
+
+      <AdminDashboard
+        isOpen={adminDashboardOpen}
+        onClose={() => setAdminDashboardOpen(false)}
+        onLogout={handleAdminLogout}
+        token={adminToken || ''}
+      />
     </div>
   );
 };

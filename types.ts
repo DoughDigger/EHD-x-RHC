@@ -9,14 +9,33 @@ export interface Artist {
   name: string;
   genre: string;
   image: string;
+  images?: string[];
+  listItems?: string[];
+  intro?: string;
+  thrillSection?: {
+    title: string;
+    subtitle?: string;
+    items: string[];
+    videoLink?: {
+      text: string;
+      url: string;
+    };
+  };
+  exclusions?: {
+    title: string;
+    items: string[];
+  };
+  pricing?: {
+    title: string;
+    packages: {
+      name: string;
+      price: string;
+    }[];
+    customText?: string;
+    paymentTerms?: string;
+  };
   day: string;
   description: string;
-}
-
-export interface ChatMessage {
-  role: 'user' | 'model';
-  text: string;
-  isError?: boolean;
 }
 
 export enum Section {

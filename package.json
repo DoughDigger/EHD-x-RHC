@@ -12,7 +12,6 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "lucide-react": "^0.553.0",
-    "@google/genai": "^1.29.0",
     "framer-motion": "^12.23.24"
   },
   "devDependencies": {
