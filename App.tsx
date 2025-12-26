@@ -661,12 +661,11 @@ const App: React.FC = () => {
       </header>
 
       {/* DIVISIONS SECTION */}
-      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 px-4 ${!isMobile ? 'snap-start' : ''}`}>
-        <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-4 md:mb-6 px-2">
-            <h2 className="text-2xl md:text-4xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg break-words w-full md:w-auto">
-              Experience the Class and Skill of <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
+      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-48 md:pt-64 pb-16 md:pb-24 px-4 ${!isMobile ? 'snap-start' : ''}`}>
+        <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6 flex flex-col h-full justify-center">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12">
+            <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg w-full md:w-auto md:whitespace-nowrap">
+              Experience the Class and Skill of <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
             </h2>
           </div>
 
