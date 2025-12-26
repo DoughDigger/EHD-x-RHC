@@ -10,20 +10,21 @@ const PORT = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-const DB_FILE = path.join(__dirname, 'registrations.json');
+const REG_DB_FILE = path.join(__dirname, 'registrations.json');
+const Q_DB_FILE = path.join(__dirname, 'questions.json');
 
 // Helper to read DB
-const readDB = () => {
-    if (!fs.existsSync(DB_FILE)) {
+const readDB = (file) => {
+    if (!fs.existsSync(file)) {
         return [];
     }
-    const data = fs.readFileSync(DB_FILE);
+    const data = fs.readFileSync(file);
     return JSON.parse(data);
 };
 
 // Helper to write DB
-const writeDB = (data) => {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+const writeDB = (file, data) => {
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
 };
 
 // Admin credentials
@@ -41,14 +42,35 @@ app.post('/api/register', (req, res) => {
             ...req.body
         };
 
-        const registrations = readDB();
+        const registrations = readDB(REG_DB_FILE);
         registrations.push(newRegistration);
-        writeDB(registrations);
+        writeDB(REG_DB_FILE, registrations);
 
         console.log('New registration received:', newRegistration.playerName);
         res.status(201).json({ message: 'Registration successful', id: newRegistration.id });
     } catch (error) {
         console.error('Error saving registration:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Question endpoint
+app.post('/api/question', (req, res) => {
+    try {
+        const newQuestion = {
+            id: Date.now().toString(),
+            timestamp: new Date().toISOString(),
+            ...req.body
+        };
+
+        const questions = readDB(Q_DB_FILE);
+        questions.push(newQuestion);
+        writeDB(Q_DB_FILE, questions);
+
+        console.log('New question received from:', newQuestion.email);
+        res.status(201).json({ message: 'Question submitted successfully', id: newQuestion.id });
+    } catch (error) {
+        console.error('Error saving question:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
@@ -65,11 +87,19 @@ app.post('/api/login', (req, res) => {
 
 // Get registrations endpoint
 app.get('/api/registrations', (req, res) => {
-    // In a real app, verify token here. For this simple version, we'll skip token check middleware
-    // but the frontend will only call this if logged in.
     try {
-        const registrations = readDB();
+        const registrations = readDB(REG_DB_FILE);
         res.status(200).json(registrations);
+    } catch (error) {
+        res.status(500).json({ message: 'Error reading database' });
+    }
+});
+
+// Get questions endpoint
+app.get('/api/questions', (req, res) => {
+    try {
+        const questions = readDB(Q_DB_FILE);
+        res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: 'Error reading database' });
     }

@@ -8,7 +8,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 // Import Icons
-import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight, Star, Plane, Utensils, MapPinned, Hotel, Bus } from 'lucide-react';
+import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight, Star, Plane, Utensils, MapPinned, Hotel, Bus, HelpCircle } from 'lucide-react';
 
 
 import FluidBackground from './components/FluidBackground';
@@ -17,6 +17,7 @@ import ArtistCard from './components/ArtistCard';
 import CommitmentForm, { CommitmentFormData } from './components/CommitmentForm';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
+import QuestionForm from './components/QuestionForm';
 import { Artist } from './types';
 import { useMobile } from './hooks/useMobile';
 
@@ -264,6 +265,7 @@ const App: React.FC = () => {
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
   const [adminDashboardOpen, setAdminDashboardOpen] = useState(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
+  const [isQuestionFormOpen, setIsQuestionFormOpen] = useState(false);
 
   const handleAdminLoginSuccess = (token: string) => {
     setAdminToken(token);
@@ -370,29 +372,31 @@ const App: React.FC = () => {
   // SECTION: REGISTRATION SECTION
   const RegistrationSection = () => {
     return (
-      <section id="register" className="relative min-h-screen py-32 px-4 md:px-10 flex flex-col justify-center snap-start bg-[#0a0b1a]">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col items-center mb-16 text-center">
+      <section id="register" className="relative min-h-screen py-12 md:py-16 pt-20 md:pt-24 px-4 md:px-10 flex flex-col snap-start bg-[#0a0b1a]">
+        <div className="max-w-7xl mx-auto w-full flex-grow flex flex-col justify-center">
+          <div className="flex flex-col items-center mb-6 md:mb-8 text-center relative">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mb-4"
             >
               <GradientText
-                text="REGISTER"
-                className="text-6xl md:text-8xl font-heading font-black tracking-tighter"
+                text="REGISTER YOUR INTEREST"
+                className="text-3xl md:text-5xl font-heading font-black tracking-tighter"
               />
             </motion.div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+
+            {/* Question Pill */}
+            <motion.button
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-gray-400 max-w-2xl font-mono text-sm uppercase tracking-widest"
+              onClick={() => setIsQuestionFormOpen(true)}
+              className="md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 mt-4 md:mt-0 px-4 py-1.5 rounded-full bg-[#4fb7b3]/10 border border-[#4fb7b3]/30 text-[#4fb7b3] text-[10px] font-bold uppercase tracking-widest hover:bg-[#4fb7b3] hover:text-black transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(79,183,179,0.1)] group"
             >
-              Secure your spot in the EHD x RHC 2026 Spring Tour.
-            </motion.p>
+              <HelpCircle className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+              Submit Question
+            </motion.button>
           </div>
 
           <div className="relative">
@@ -426,6 +430,33 @@ const App: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Integrated Footer */}
+        <footer className="w-full border-t border-white/10 py-8 mt-12">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+              <div className="font-heading text-xl md:text-2xl font-bold tracking-tighter mb-1 text-white">RHC INVITE</div>
+              <div className="flex gap-2 text-[10px] font-mono text-gray-400">
+                <span>Official Registration Portal</span>
+              </div>
+            </div>
+
+            <div className="flex gap-6 flex-wrap">
+              <button
+                onClick={() => setAdminLoginOpen(true)}
+                className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
+              >
+                Admin
+              </button>
+              <button
+                onClick={() => setIsQuestionFormOpen(true)}
+                className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
+              >
+                Contact
+              </button>
+            </div>
+          </div>
+        </footer>
       </section>
     );
   };
@@ -639,10 +670,10 @@ const App: React.FC = () => {
       </header>
 
       {/* DIVISIONS SECTION */}
-      <section id="tournament" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-8 md:py-20 px-4 ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 px-4 ${!isMobile ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-4 md:mb-12 px-2">
-            <h2 className="text-2xl md:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg break-words w-full md:w-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-4 md:mb-6 px-2">
+            <h2 className="text-2xl md:text-4xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg break-words w-full md:w-auto">
               Experience the Class and Skill of <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
             </h2>
@@ -657,32 +688,34 @@ const App: React.FC = () => {
       </section>
 
       {/* AGENDA SECTION */}
-      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 px-4 bg-black/10 backdrop-blur-sm border-t border-white/10 ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="agenda" className={`relative h-screen w-full shrink-0 flex flex-col justify-center py-8 md:py-10 px-4 bg-black/10 backdrop-blur-sm border-t border-white/10 ${!isMobile ? 'snap-start' : ''}`}>
         <div className="max-w-7xl w-full mx-auto px-4 md:px-6">
           {/* Section Header */}
-          <div className="text-center mb-8 md:mb-12">
+          <div className="text-center mb-3 md:mb-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-7xl font-heading font-bold mb-4 uppercase">
-                Trip <GradientText text="Agenda" className="text-4xl md:text-7xl" />
-              </h2>
-              <p className="text-[#a8fbd3] font-mono uppercase tracking-widest text-xs md:text-sm mb-4">
-                April 13-20, 2026
-              </p>
-              <div className="max-w-3xl mx-auto px-4 py-3 bg-white/5 border border-white/10 rounded-xl backdrop-blur-md">
-                <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-                  <span className="font-bold text-[#4fb7b3]">Sample Itinerary:</span> This is a preliminary schedule. The finalized version will be provided <span className="font-bold text-white">1 month prior to travel</span>.
+              <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mb-3">
+                <h2 className="text-2xl md:text-4xl font-heading font-bold uppercase">
+                  Trip <GradientText text="Agenda" className="text-2xl md:text-4xl" />
+                </h2>
+                <p className="text-[#a8fbd3] font-mono uppercase tracking-widest text-xs">
+                  April 13-20, 2026
+                </p>
+              </div>
+              <div className="max-w-3xl mx-auto px-3 py-2 bg-white/5 border border-white/10 rounded-lg backdrop-blur-md">
+                <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
+                  <span className="font-bold text-[#4fb7b3]">Sample Itinerary:</span> Finalized version provided 1 month prior to travel.
                 </p>
               </div>
             </motion.div>
           </div>
 
           {/* Compact Timeline Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 max-h-[calc(100vh-220px)] overflow-y-auto custom-scrollbar">
             {TRIP_SCHEDULE.map((day, dayIndex) => {
               // Helper function to get icon based on activity type and description
               const getIcon = (type: string, description: string) => {
@@ -720,15 +753,15 @@ const App: React.FC = () => {
                   transition={{ duration: 0.5, delay: dayIndex * 0.05 }}
                   viewport={{ once: true, margin: "-50px" }}
                   whileHover={{ y: -3 }}
-                  className={`group relative p-5 md:p-6 rounded-xl border backdrop-blur-md transition-all duration-300 ${day.tournament
+                  className={`group relative p-2 md:p-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${day.tournament
                     ? 'bg-gradient-to-br from-[#4fb7b3]/20 to-[#637ab9]/20 border-[#4fb7b3]/30 hover:border-[#4fb7b3]/50 hover:bg-[#4fb7b3]/20 shadow-lg shadow-[#4fb7b3]/10'
                     : 'bg-white/10 border-white/10 hover:border-white/20 hover:bg-white/15'
                     }`}
                 >
                   {/* Day Header */}
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-lg ${day.tournament
+                      <div className={`flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-lg ${day.tournament
                         ? 'bg-gradient-to-br from-[#a8fbd3] to-[#4fb7b3] text-black'
                         : 'bg-white/10 text-[#a8fbd3]'
                         }`}>
@@ -742,10 +775,10 @@ const App: React.FC = () => {
                         </div>
                       </div>
                       <div>
-                        <h3 className="text-base md:text-lg font-heading font-bold text-white tracking-wide">
+                        <h3 className="text-xs md:text-sm font-heading font-bold text-white tracking-wide">
                           {day.date.replace(/,.*/, '')}
                         </h3>
-                        <p className="text-xs md:text-sm text-gray-300 font-medium">
+                        <p className="text-[9px] md:text-[10px] text-gray-300 font-medium">
                           {day.date.match(/,\s*(.*)$/)?.[1]}
                         </p>
                       </div>
@@ -761,18 +794,18 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Activities */}
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     {day.activities.map((activity, actIndex) => (
                       <div
                         key={actIndex}
                         className="flex items-start gap-3"
                       >
-                        <div className={`shrink-0 mt-1 ${day.tournament ? 'text-[#a8fbd3]' : 'text-gray-400'
+                        <div className={`shrink-0 mt-0.5 ${day.tournament ? 'text-[#a8fbd3]' : 'text-gray-400'
                           }`}>
                           {getIcon(activity.type, activity.description)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm md:text-base leading-snug text-gray-200 font-medium">
+                          <p className="text-[10px] md:text-xs leading-snug text-gray-200 font-medium">
                             {activity.time && (
                               <span className="font-mono font-bold text-white mr-2">
                                 {activity.time}
@@ -799,20 +832,20 @@ const App: React.FC = () => {
       </section>
 
       {/* EXPERIENCE SECTION */}
-      <section id="experience" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 bg-black/20 backdrop-blur-sm border-t border-white/10 overflow-hidden ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="experience" className={`relative h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 pb-20 md:pb-24 bg-black/20 backdrop-blur-sm border-t border-white/10 overflow-hidden ${!isMobile ? 'snap-start' : ''}`}>
         <div className="absolute top-1/2 right-[-20%] w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] bg-[#4fb7b3]/20 rounded-full blur-[40px] pointer-events-none will-change-transform" style={{ transform: 'translateZ(0)' }} />
 
         <div className="max-w-6xl w-full mx-auto px-6 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center">
             <div className="lg:col-span-5 order-2 lg:order-1">
-              <h2 className="text-3xl md:text-6xl font-heading font-bold mb-6 leading-tight">
-                Beyond <br /> <GradientText text="THE ICE" className="text-4xl md:text-7xl" />
+              <h2 className="text-3xl md:text-5xl font-heading font-bold mb-4 leading-tight">
+                Beyond <br /> <GradientText text="THE ICE" className="text-3xl md:text-5xl" />
               </h2>
-              <p className="text-base md:text-lg text-gray-200 mb-8 font-light leading-relaxed drop-shadow-md">
+              <p className="text-sm md:text-base text-gray-200 mb-6 font-light leading-relaxed drop-shadow-md">
                 Experience the "Culture Capital of the Baltics." Beyond the world-class hockey, Riga is an architectural pearl where 800 years of Gothic, Medieval, and Art Nouveau history meet the pulse of modern European life.
               </p>
 
-              <div className="space-y-6 md:space-y-6">
+              <div className="space-y-4 md:space-y-5">
                 {[
                   { icon: Shield, title: 'Architectural Pearl', desc: 'Explore 800 years of heritage, from Gothic cathedrals to exquisite Art Nouveau.' },
                   { icon: Zap, title: 'Capital of Gastronomy', desc: 'A fusion of traditional Latvian meals and astonishing modern combinations.' },
@@ -822,11 +855,11 @@ const App: React.FC = () => {
                     key={i}
                     className="flex items-start gap-4"
                   >
-                    <div className="p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/5">
-                      <feature.icon className="w-5 h-5 text-white" />
+                    <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/5">
+                      <feature.icon className="w-4 h-4 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold mb-1 font-heading">{feature.title}</h4>
+                      <h4 className="text-base font-bold mb-1 font-heading">{feature.title}</h4>
                       <p className="text-xs text-gray-300">{feature.desc}</p>
                     </div>
                   </div>
@@ -834,7 +867,7 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-7 relative h-[400px] md:h-[600px] w-full order-1 lg:order-2">
+            <div className="lg:col-span-7 relative h-[350px] md:h-[500px] w-full order-1 lg:order-2">
               <div className="absolute inset-0 bg-gradient-to-br from-[#637ab9] to-[#4fb7b3] rounded-2xl rotate-3 opacity-30 blur-xl" />
               <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 group shadow-2xl bg-black/40">
                 <AnimatePresence mode="wait">
@@ -905,35 +938,11 @@ const App: React.FC = () => {
       {/* REGISTER SECTION */}
       <RegistrationSection />
 
-      <footer className="w-full border-t border-white/10 py-12 md:py-12 bg-black/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-          <div>
-            <div className="font-heading text-2xl md:text-3xl font-bold tracking-tighter mb-2 text-white">RHC INVITE</div>
-            <div className="flex gap-2 text-[10px] font-mono text-gray-400">
-              <span>Official Registration Portal</span>
-            </div>
-          </div>
-
-          <div className="flex gap-8 flex-wrap">
-            <button
-              onClick={() => setAdminLoginOpen(true)}
-              className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
-            >
-              Admin
-            </button>
-            <a href="https://x.com/GoogleAIStudio" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
-              Twitter
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
-              Rules
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer" data-hover="true">
-              Contact
-            </a>
-          </div>
-        </div>
-      </footer>
-
+      {/* Question Form Modal */}
+      <QuestionForm
+        isOpen={isQuestionFormOpen}
+        onClose={() => setIsQuestionFormOpen(false)}
+      />
 
       {/* Division Detail Modal */}
       <AnimatePresence>

@@ -94,33 +94,18 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
             onClick={(e) => e.stopPropagation()}
             className={`relative w-full ${isInline ? 'max-w-4xl mx-auto' : 'max-w-2xl'} bg-[#1a1b3b] border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-[#4fb7b3]/20`}
         >
-            {/* Header */}
-            <div className="relative bg-gradient-to-r from-[#4fb7b3]/20 to-[#637ab9]/20 border-b border-white/10 p-6 md:p-8">
-                {!isInline && onClose && (
-                    <button
-                        onClick={onClose}
-                        className="absolute top-4 right-4 p-2 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10"
-                        data-hover="true"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                )}
-
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2.5 rounded-xl bg-[#4fb7b3]/20 border border-[#4fb7b3]/30">
-                        <Trophy className="w-6 h-6 text-[#4fb7b3]" />
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">
-                        {isInline ? 'Register Your Interest' : 'Registration Form'}
-                    </h2>
-                </div>
-                <p className="text-[#a8fbd3] font-mono text-sm tracking-widest uppercase mt-2">
-                    {isInline ? 'EHD Spring Tour x Riga Hockey Cup 2026' : `${packageName} Package`}
-                </p>
-            </div>
+            {!isInline && onClose && (
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 p-2 rounded-full bg-black/30 text-white hover:bg-white hover:text-black transition-colors border border-white/10 z-10"
+                    data-hover="true"
+                >
+                    <X className="w-5 h-5" />
+                </button>
+            )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className={`p-6 md:p-8 space-y-6 ${!isInline ? 'max-h-[60vh] overflow-y-auto custom-scrollbar' : ''}`}>
+            <form onSubmit={handleSubmit} className={`p-4 md:p-6 space-y-4 ${!isInline ? 'max-h-[60vh] overflow-y-auto custom-scrollbar' : ''}`}>
                 {/* Package Selection - Only if inline */}
                 {isInline && (
                     <div>
@@ -172,7 +157,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                         <UserCircle className="w-5 h-5 text-[#4fb7b3]" />
                         Parent Information
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label htmlFor="parentFirstName" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
                                 First Name *
@@ -203,21 +188,21 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                                 placeholder="Enter last name"
                             />
                         </div>
-                    </div>
-                    <div className="mt-4">
-                        <label htmlFor="email" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
-                            Email Address *
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all"
-                            placeholder="your.email@example.com"
-                        />
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
+                                Email Address *
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all"
+                                placeholder="your.email@example.com"
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -244,7 +229,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label htmlFor="level" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
                                     Level *
@@ -276,7 +261,23 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                                     onChange={handleChange}
                                     required
                                     className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all"
-                                    placeholder="e.g., GTHL, OMHA, USA Hockey"
+                                    placeholder="e.g., GTHL"
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor="team" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
+                                    Team *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="team"
+                                    name="team"
+                                    value={formData.team}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all"
+                                    placeholder="Enter team"
                                 />
                             </div>
                         </div>
@@ -302,24 +303,6 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                                 />
                             </motion.div>
                         )}
-
-                        {/* Current League field moved up */}
-
-                        <div>
-                            <label htmlFor="team" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
-                                Team *
-                            </label>
-                            <input
-                                type="text"
-                                id="team"
-                                name="team"
-                                value={formData.team}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all"
-                                placeholder="Enter team name"
-                            />
-                        </div>
                     </div>
                 </div>
 
