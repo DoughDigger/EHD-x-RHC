@@ -76,6 +76,7 @@ const DIVISIONS: Artist[] = [
       title: 'What\'s Included',
       items: [
         'Tournament Fee',
+        'Jersey, socks, T-shirt and hat',
         '6 nights (Check in Apr 14, Check out Apr 20) stay at 4* Hotel in Downtown Riga (Radisson Blu Daugava) incl. breakfast for all guests',
         'Team bus transfers x8 (Airport transfers x2, Round trip transfer to games x6)',
         '2 Guided Group Sightseeing Tours (Timing: Pre-tournament start; Options to be provided once roster confirmed)',
@@ -386,17 +387,6 @@ const App: React.FC = () => {
               />
             </motion.div>
 
-            {/* Question Pill */}
-            <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              onClick={() => setIsQuestionFormOpen(true)}
-              className="md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 mt-4 md:mt-0 px-4 py-1.5 rounded-full bg-[#4fb7b3]/10 border border-[#4fb7b3]/30 text-[#4fb7b3] text-[10px] font-bold uppercase tracking-widest hover:bg-[#4fb7b3] hover:text-black transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(79,183,179,0.1)] group"
-            >
-              <HelpCircle className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
-              Submit Question
-            </motion.button>
           </div>
 
           <div className="relative">
@@ -404,6 +394,7 @@ const App: React.FC = () => {
               <CommitmentForm
                 onSubmit={handleCommitmentSubmit}
                 isInline={true}
+                onQuestionClick={() => setIsQuestionFormOpen(true)}
               />
             ) : (
               <motion.div

@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UserCircle, Calendar, Trophy, Users } from 'lucide-react';
+import { X, UserCircle, Calendar, Trophy, Users, HelpCircle } from 'lucide-react';
 
 interface CommitmentFormProps {
     isOpen?: boolean;
@@ -13,6 +13,7 @@ interface CommitmentFormProps {
     onSubmit: (data: CommitmentFormData) => void;
     packageName?: string;
     isInline?: boolean;
+    onQuestionClick?: () => void;
 }
 
 export interface CommitmentFormData {
@@ -28,7 +29,7 @@ export interface CommitmentFormData {
     packageOther?: string;
 }
 
-const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubmit, packageName, isInline = false }) => {
+const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubmit, packageName, isInline = false, onQuestionClick }) => {
     const [formData, setFormData] = useState<CommitmentFormData>({
         parentFirstName: '',
         parentLastName: '',
@@ -101,6 +102,18 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                     data-hover="true"
                 >
                     <X className="w-5 h-5" />
+                </button>
+            )}
+
+            {isInline && onQuestionClick && (
+                <button
+                    onClick={onQuestionClick}
+                    className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[#4fb7b3]/10 border border-[#4fb7b3]/30 text-[#4fb7b3] text-[10px] font-bold uppercase tracking-widest hover:bg-[#4fb7b3] hover:text-black transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(79,183,179,0.1)] group z-10"
+                    data-hover="true"
+                    title="Submit Question"
+                >
+                    <HelpCircle className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+                    <span className="hidden sm:inline">Submit Question</span>
                 </button>
             )}
 

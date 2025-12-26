@@ -37,18 +37,5 @@
     "level": "AA",
     "levelOther": "",
     "packageOther": "Need 1 Player + 4 Guests"
-  },
-  {
-    "id": "1766718178834",
-    "timestamp": "2025-12-26T03:02:58.835Z",
-    "parentFirstName": "Test",
-    "parentLastName": "Parent",
-    "email": "test@example.com",
-    "playerName": "Test Player",
-    "playerCurrentLeague": "GTHL",
-    "team": "Test Team",
-    "level": "AA",
-    "levelOther": "",
-    "packageOther": ""
   }
 ]

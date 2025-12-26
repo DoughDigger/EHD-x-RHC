@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const XLSX = require('xlsx');
 
 const app = express();
 const PORT = 3001;
@@ -54,6 +55,27 @@ app.post('/api/register', (req, res) => {
     }
 });
 
+// Delete registration endpoint
+app.delete('/api/registrations/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        let registrations = readDB(REG_DB_FILE);
+        const initialLength = registrations.length;
+        registrations = registrations.filter(reg => reg.id !== id);
+
+        if (registrations.length === initialLength) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+
+        writeDB(REG_DB_FILE, registrations);
+        console.log('Registration deleted:', id);
+        res.status(200).json({ message: 'Registration deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting registration:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 // Question endpoint
 app.post('/api/question', (req, res) => {
     try {
@@ -71,6 +93,27 @@ app.post('/api/question', (req, res) => {
         res.status(201).json({ message: 'Question submitted successfully', id: newQuestion.id });
     } catch (error) {
         console.error('Error saving question:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Delete question endpoint
+app.delete('/api/questions/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        let questions = readDB(Q_DB_FILE);
+        const initialLength = questions.length;
+        questions = questions.filter(q => q.id !== id);
+
+        if (questions.length === initialLength) {
+            return res.status(404).json({ message: 'Question not found' });
+        }
+
+        writeDB(Q_DB_FILE, questions);
+        console.log('Question deleted:', id);
+        res.status(200).json({ message: 'Question deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting question:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
@@ -102,6 +145,43 @@ app.get('/api/questions', (req, res) => {
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: 'Error reading database' });
+    }
+});
+
+// Export endpoints
+app.get('/api/export/registrations', (req, res) => {
+    try {
+        const registrations = readDB(REG_DB_FILE);
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(registrations);
+        XLSX.utils.book_append_sheet(wb, ws, "Registrations");
+
+        const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+
+        res.setHeader('Content-Disposition', 'attachment; filename=registrations.xlsx');
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.send(buffer);
+    } catch (error) {
+        console.error('Error exporting registrations:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.get('/api/export/questions', (req, res) => {
+    try {
+        const questions = readDB(Q_DB_FILE);
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(questions);
+        XLSX.utils.book_append_sheet(wb, ws, "Questions");
+
+        const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+
+        res.setHeader('Content-Disposition', 'attachment; filename=questions.xlsx');
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.send(buffer);
+    } catch (error) {
+        console.error('Error exporting questions:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare } from 'lucide-react';
+import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare, Trash2, Download } from 'lucide-react';
 
 interface Registration {
     id: string;
@@ -79,6 +79,54 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
         setExpandedId(expandedId === id ? null : id);
     };
 
+    const handleDelete = async (id: string, type: 'registrations' | 'questions') => {
+        if (!window.confirm(`Are you sure you want to delete this ${type === 'registrations' ? 'registration' : 'question'}? This action cannot be undone.`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3001/api/${type}/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                if (type === 'registrations') {
+                    setRegistrations(registrations.filter(reg => reg.id !== id));
+                } else {
+                    setQuestions(questions.filter(q => q.id !== id));
+                }
+                if (expandedId === id) setExpandedId(null);
+            } else {
+                alert('Error deleting entry');
+            }
+        } catch (error) {
+            console.error('Error deleting entry:', error);
+            alert('Error deleting entry');
+        }
+    };
+
+    const handleExport = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/export/${activeTab}`);
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${activeTab}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } else {
+                alert('Error exporting data');
+            }
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            alert('Error exporting data');
+        }
+    };
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -128,6 +176,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                 title="Refresh Data"
                             >
                                 <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
+                            </button>
+                            <button
+                                onClick={handleExport}
+                                className="flex px-4 py-2.5 bg-[#4fb7b3]/10 text-[#4fb7b3] border border-[#4fb7b3]/20 font-bold uppercase tracking-wider rounded-lg hover:bg-[#4fb7b3] hover:text-black transition-all items-center gap-2"
+                                title="Download Excel"
+                            >
+                                <Download className="w-4 h-4" />
+                                <span className="hidden md:inline">Export Excel</span>
                             </button>
                             <button
                                 onClick={onLogout}
@@ -182,116 +238,131 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                         </div>
                                     ) : activeTab === 'registrations' ? (
                                         registrations.map((reg) => (
-                                            <div key={reg.id} className="hover:bg-white/5 transition-colors">
-                                                {/* Desktop Row */}
-                                                <div className="hidden md:grid grid-cols-12 gap-4 p-5 items-center text-sm">
-                                                    <div className="col-span-2 text-gray-400 font-mono text-xs">
-                                                        {new Date(reg.timestamp).toLocaleDateString()} <br />
-                                                        {new Date(reg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            <div key={reg.id} className="border-b border-white/5 last:border-0">
+                                                <div className="hover:bg-white/5 transition-colors">
+                                                    {/* Desktop Row */}
+                                                    <div className="hidden md:grid grid-cols-12 gap-4 p-5 items-center text-sm">
+                                                        <div className="col-span-2 text-gray-400 font-mono text-xs">
+                                                            {new Date(reg.timestamp).toLocaleDateString()} <br />
+                                                            {new Date(reg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${reg.packageName === 'Free Agent' ? 'bg-white/10 text-white border-white/20' :
+                                                                reg.packageName === 'Team Entry' ? 'bg-[#4fb7b3]/20 text-[#4fb7b3] border-[#4fb7b3]/30' :
+                                                                    'bg-[#637ab9]/20 text-[#637ab9] border-[#637ab9]/30'
+                                                                }`}>
+                                                                {reg.packageName}
+                                                            </span>
+                                                        </div>
+                                                        <div className="col-span-3 font-bold text-white">
+                                                            {reg.playerName} <span className="text-gray-500 font-normal text-xs">({reg.playerBirthYear})</span>
+                                                        </div>
+                                                        <div className="col-span-2 text-gray-300">{reg.team}</div>
+                                                        <div className="col-span-2 text-gray-300">
+                                                            {reg.level} {reg.level === 'Other' && <span className="text-xs text-gray-500">({reg.levelOther})</span>}
+                                                        </div>
+                                                        <div className="col-span-1 flex justify-center gap-2">
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); handleDelete(reg.id, 'registrations'); }}
+                                                                className="p-2 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-full transition-colors"
+                                                                title="Delete Entry"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => toggleExpand(reg.id)}
+                                                                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                                            >
+                                                                {expandedId === reg.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-span-2">
-                                                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${reg.packageName === 'Free Agent' ? 'bg-white/10 text-white border-white/20' :
-                                                            reg.packageName === 'Team Entry' ? 'bg-[#4fb7b3]/20 text-[#4fb7b3] border-[#4fb7b3]/30' :
-                                                                'bg-[#637ab9]/20 text-[#637ab9] border-[#637ab9]/30'
-                                                            }`}>
-                                                            {reg.packageName}
-                                                        </span>
-                                                    </div>
-                                                    <div className="col-span-3 font-bold text-white">
-                                                        {reg.playerName} <span className="text-gray-500 font-normal text-xs">({reg.playerBirthYear})</span>
-                                                    </div>
-                                                    <div className="col-span-2 text-gray-300">{reg.team}</div>
-                                                    <div className="col-span-2 text-gray-300">
-                                                        {reg.level} {reg.level === 'Other' && <span className="text-xs text-gray-500">({reg.levelOther})</span>}
-                                                    </div>
-                                                    <div className="col-span-1 flex justify-center">
-                                                        <button
-                                                            onClick={() => toggleExpand(reg.id)}
-                                                            className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                                                        >
+
+                                                    {/* Mobile Row Summary */}
+                                                    <div
+                                                        className="md:hidden p-5 flex items-center justify-between cursor-pointer"
+                                                        onClick={() => toggleExpand(reg.id)}
+                                                    >
+                                                        <div>
+                                                            <div className="font-bold text-white mb-1">{reg.playerName}</div>
+                                                            <div className="text-xs text-gray-400">{reg.team} • {reg.level}</div>
+                                                        </div>
+                                                        <div className="flex items-center gap-3">
+                                                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${reg.packageName === 'Free Agent' ? 'bg-white/10 text-white' :
+                                                                reg.packageName === 'Team Entry' ? 'bg-[#4fb7b3]/20 text-[#4fb7b3]' :
+                                                                    'bg-[#637ab9]/20 text-[#637ab9]'
+                                                                }`}>
+                                                                {reg.packageName}
+                                                            </span>
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); handleDelete(reg.id, 'registrations'); }}
+                                                                className="p-2 text-red-500/50 hover:text-red-500 transition-colors"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
                                                             {expandedId === reg.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                                                        </button>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* Mobile Row Summary */}
-                                                <div
-                                                    className="md:hidden p-5 flex items-center justify-between cursor-pointer"
-                                                    onClick={() => toggleExpand(reg.id)}
-                                                >
-                                                    <div>
-                                                        <div className="font-bold text-white mb-1">{reg.playerName}</div>
-                                                        <div className="text-xs text-gray-400">{reg.team} • {reg.level}</div>
-                                                    </div>
-                                                    <div className="flex items-center gap-3">
-                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${reg.packageName === 'Free Agent' ? 'bg-white/10 text-white' :
-                                                            reg.packageName === 'Team Entry' ? 'bg-[#4fb7b3]/20 text-[#4fb7b3]' :
-                                                                'bg-[#637ab9]/20 text-[#637ab9]'
-                                                            }`}>
-                                                            {reg.packageName}
-                                                        </span>
-                                                        {expandedId === reg.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                                                    </div>
-                                                </div>
+                                                    {/* Expanded Details */}
+                                                    <AnimatePresence>
+                                                        {expandedId === reg.id && (
+                                                            <motion.div
+                                                                initial={{ height: 0, opacity: 0 }}
+                                                                animate={{ height: 'auto', opacity: 1 }}
+                                                                exit={{ height: 0, opacity: 0 }}
+                                                                className="overflow-hidden bg-black/20"
+                                                            >
+                                                                <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-white/5">
+                                                                    <div>
+                                                                        <h4 className="text-[#4fb7b3] text-xs font-bold uppercase tracking-widest mb-4">Player Details</h4>
+                                                                        <div className="space-y-2 text-sm">
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">Full Name</span>
+                                                                                <span className="text-white">{reg.playerName}</span>
+                                                                            </div>
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">Birth Year</span>
+                                                                                <span className="text-white">{reg.playerBirthYear}</span>
+                                                                            </div>
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">Team</span>
+                                                                                <span className="text-white">{reg.team}</span>
+                                                                            </div>
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">League</span>
+                                                                                <span className="text-white">{reg.playerCurrentLeague}</span>
+                                                                            </div>
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">Level</span>
+                                                                                <span className="text-white">{reg.level} {reg.levelOther && `(${reg.levelOther})`}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
-                                                {/* Expanded Details */}
-                                                <AnimatePresence>
-                                                    {expandedId === reg.id && (
-                                                        <motion.div
-                                                            initial={{ height: 0, opacity: 0 }}
-                                                            animate={{ height: 'auto', opacity: 1 }}
-                                                            exit={{ height: 0, opacity: 0 }}
-                                                            className="overflow-hidden bg-black/20"
-                                                        >
-                                                            <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-white/5">
-                                                                <div>
-                                                                    <h4 className="text-[#4fb7b3] text-xs font-bold uppercase tracking-widest mb-4">Player Details</h4>
-                                                                    <div className="space-y-2 text-sm">
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">Full Name</span>
-                                                                            <span className="text-white">{reg.playerName}</span>
-                                                                        </div>
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">Birth Year</span>
-                                                                            <span className="text-white">{reg.playerBirthYear}</span>
-                                                                        </div>
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">Team</span>
-                                                                            <span className="text-white">{reg.team}</span>
-                                                                        </div>
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">League</span>
-                                                                            <span className="text-white">{reg.playerCurrentLeague}</span>
-                                                                        </div>
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">Level</span>
-                                                                            <span className="text-white">{reg.level} {reg.levelOther && `(${reg.levelOther})`}</span>
+                                                                    <div>
+                                                                        <h4 className="text-[#637ab9] text-xs font-bold uppercase tracking-widest mb-4">Parent / Guardian</h4>
+                                                                        <div className="space-y-2 text-sm">
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">Name</span>
+                                                                                <span className="text-white">{reg.parentFirstName} {reg.parentLastName}</span>
+                                                                            </div>
+                                                                            <div className="flex justify-between border-b border-white/5 pb-2">
+                                                                                <span className="text-gray-500">Email</span>
+                                                                                <span className="text-white font-mono text-xs">{reg.email}</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-                                                                <div>
-                                                                    <h4 className="text-[#637ab9] text-xs font-bold uppercase tracking-widest mb-4">Parent / Guardian</h4>
-                                                                    <div className="space-y-2 text-sm">
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">Name</span>
-                                                                            <span className="text-white">{reg.parentFirstName} {reg.parentLastName}</span>
-                                                                        </div>
-                                                                        <div className="flex justify-between border-b border-white/5 pb-2">
-                                                                            <span className="text-gray-500">Email</span>
-                                                                            <span className="text-white font-mono text-xs">{reg.email}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </motion.div>
-                                                    )}
-                                                </AnimatePresence>
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
                                             </div>
                                         ))
                                     ) : (
                                         questions.map((q) => (
-                                            <div key={q.id} className="hover:bg-white/5 transition-colors">
+                                            <div key={q.id} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
                                                 {/* Desktop Row */}
                                                 <div className="hidden md:grid grid-cols-12 gap-4 p-5 items-center text-sm cursor-pointer" onClick={() => toggleExpand(q.id)}>
                                                     <div className="col-span-2 text-gray-400 font-mono text-xs">
@@ -304,8 +375,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                                     <div className="col-span-5 text-gray-400 truncate italic font-light">
                                                         "{q.text}"
                                                     </div>
-                                                    <div className="col-span-1 flex justify-center">
+                                                    <div className="col-span-1 flex justify-center gap-2">
                                                         <button
+                                                            onClick={(e) => { e.stopPropagation(); handleDelete(q.id, 'questions'); }}
+                                                            className="p-2 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-full transition-colors"
+                                                            title="Delete Question"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); toggleExpand(q.id); }}
                                                             className="p-2 hover:bg-white/10 rounded-full transition-colors"
                                                         >
                                                             {expandedId === q.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -322,7 +401,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                                         <div className="font-bold text-white mb-1 truncate">{q.email}</div>
                                                         <div className="text-xs text-gray-400 truncate italic">"{q.text}"</div>
                                                     </div>
-                                                    <div className="pl-4">
+                                                    <div className="pl-4 flex items-center gap-2">
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); handleDelete(q.id, 'questions'); }}
+                                                            className="p-2 text-red-500/50 hover:text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
                                                         {expandedId === q.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                                     </div>
                                                 </div>
