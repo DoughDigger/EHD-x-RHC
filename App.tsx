@@ -242,6 +242,34 @@ const TRIP_SCHEDULE = [
 const App: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Helper function to get icon based on activity type and description
+  const getIcon = (type: string, description: string) => {
+    switch (type) {
+      case 'departure':
+      case 'arrival':
+        return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
+      case 'transfer':
+        // Check if it's airport transfer or local transfer
+        if (description.toLowerCase().includes('airport')) {
+          return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
+        } else {
+          return <Bus className="w-4 h-4 md:w-5 md:h-5" />;
+        }
+      case 'game':
+        return <Activity className="w-4 h-4 md:w-5 md:h-5" />;
+      case 'meal':
+        return <Utensils className="w-4 h-4 md:w-5 md:h-5" />;
+      case 'tour':
+        return <MapPinned className="w-4 h-4 md:w-5 md:h-5" />;
+      case 'tournament':
+        return <Trophy className="w-4 h-4 md:w-5 md:h-5" />;
+      case 'free':
+        return <Hotel className="w-4 h-4 md:w-5 md:h-5" />;
+      default:
+        return <Calendar className="w-4 h-4 md:w-5 md:h-5" />;
+    }
+  };
+
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
   };
@@ -761,34 +789,6 @@ const App: React.FC = () => {
             ) : (
               // Desktop View: List ALL days
               TRIP_SCHEDULE.map((day, dayIndex) => {
-                // Helper function to get icon based on activity type and description
-                const getIcon = (type: string, description: string) => {
-                  switch (type) {
-                    case 'departure':
-                    case 'arrival':
-                      return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
-                    case 'transfer':
-                      // Check if it's airport transfer or local transfer
-                      if (description.toLowerCase().includes('airport')) {
-                        return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
-                      } else {
-                        return <Bus className="w-4 h-4 md:w-5 md:h-5" />;
-                      }
-                    case 'game':
-                      return <Activity className="w-4 h-4 md:w-5 md:h-5" />;
-                    case 'meal':
-                      return <Utensils className="w-4 h-4 md:w-5 md:h-5" />;
-                    case 'tour':
-                      return <MapPinned className="w-4 h-4 md:w-5 md:h-5" />;
-                    case 'tournament':
-                      return <Trophy className="w-4 h-4 md:w-5 md:h-5" />;
-                    case 'free':
-                      return <Hotel className="w-4 h-4 md:w-5 md:h-5" />;
-                    default:
-                      return <Calendar className="w-4 h-4 md:w-5 md:h-5" />;
-                  }
-                };
-
                 return (
                   <motion.div
                     key={dayIndex}
