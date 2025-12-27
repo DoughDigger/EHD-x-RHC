@@ -461,7 +461,7 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       {/* HERO SECTION */}
-      <header className={`relative h-[100dvh] w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 md:px-4 bg-black/20 backdrop-blur-sm ${device.isDesktop ? 'snap-start' : ''}`}>
+      <header className={`relative h-screen w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 md:px-4 bg-black/40 ${device.isDesktop ? 'snap-start' : ''}`}>
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
           className="z-10 text-center flex flex-col items-center w-full max-w-screen-2xl pb-36 md:pb-20 pt-16 md:pt-0"
@@ -639,7 +639,7 @@ const App: React.FC = () => {
       </header>
 
       {/* DIVISIONS SECTION */}
-      <section id="tournament" className={`relative min-h-screen md:h-screen w-full shrink-0 flex flex-col pt-32 md:pt-28 lg:pt-32 pb-12 md:pb-16 lg:pb-24 px-4 bg-black/20 backdrop-blur-sm ${device.isDesktop ? 'snap-start' : ''}`}>
+      <section id="tournament" className={`relative min-h-screen md:h-screen w-full shrink-0 flex flex-col pt-32 md:pt-28 lg:pt-32 pb-12 md:pb-16 lg:pb-24 px-4 bg-black/40 ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6 flex flex-col h-full justify-center">
           {/* Section Header */}
           <div className="mb-6 md:mb-10 lg:mb-12 px-2 md:px-4 relative z-10">
@@ -657,7 +657,7 @@ const App: React.FC = () => {
       </section>
 
       {/* AGENDA SECTION */}
-      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 lg:py-20 px-4 border-t border-white/10 bg-black/20 backdrop-blur-sm ${device.isDesktop ? 'snap-start' : ''}`}>
+      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 lg:py-20 px-4 border-t border-white/10 bg-black/40 ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="max-w-7xl w-full mx-auto px-4 md:px-6">
           {/* Section Header */}
           <div className="text-center mb-3 md:mb-4">
