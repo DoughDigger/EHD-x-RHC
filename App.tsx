@@ -661,11 +661,11 @@ const App: React.FC = () => {
       </header>
 
       {/* DIVISIONS SECTION */}
-      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-48 md:pt-64 pb-16 md:pb-24 px-4 ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-24 md:pt-32 pb-16 md:pb-24 px-4 ${!isMobile ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6 flex flex-col h-full justify-center">
           {/* Section Header */}
           <div className="mb-8 md:mb-12 px-2 md:px-4">
-            <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg whitespace-nowrap overflow-hidden text-ellipsis">
+            <h2 className="text-lg md:text-2xl lg:text-3xl xl:text-4xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg whitespace-nowrap overflow-hidden text-ellipsis">
               Experience the Class and Skill of <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
             </h2>
           </div>

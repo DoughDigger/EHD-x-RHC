@@ -20,7 +20,7 @@ const ArtistCard: React.FC<ArtistCardProps> = ({ artist, onClick }) => {
 
   return (
     <motion.div
-      className="group relative h-[25vh] md:h-[750px] w-full overflow-hidden border-b md:border-r border-white/20 bg-black cursor-pointer"
+      className="group relative h-[35vh] md:h-[900px] w-full overflow-hidden border-b md:border-r border-white/20 bg-black cursor-pointer"
       initial="rest"
       whileHover={isMobile ? "rest" : "hover"}
       whileTap="hover"
