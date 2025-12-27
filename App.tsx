@@ -259,7 +259,7 @@ const App: React.FC = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [selectedDivision, subCarouselIndex]);
+  }, [selectedDivision]); // Fixed: removed subCarouselIndex from deps to prevent interval recreation
 
   const [purchasingIndex, setPurchasingIndex] = useState<number | null>(null);
   const [purchasedIndex, setPurchasedIndex] = useState<number | null>(null);
