@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const XLSX = require('xlsx');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -68,6 +69,10 @@ app.post('/api/register', (req, res) => {
         writeDB(REG_DB_FILE, registrations);
 
         console.log('New registration received:', newRegistration.playerName);
+
+        // Send confirmation email (async, don't wait for it to respond to client)
+        sendConfirmationEmail(newRegistration);
+
         res.status(201).json({ message: 'Registration successful', id: newRegistration.id });
     } catch (error) {
         console.error('Error saving registration:', error);
@@ -116,6 +121,92 @@ app.post('/api/question', (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+// Email Transporter Setup
+const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: process.env.EMAIL_PORT || 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
+
+// Email Template Function
+const createEmailTemplate = (data) => {
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: 'Arial', sans-serif; background-color: #0f1025; color: #ffffff; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; background-color: #1a1b3b; }
+            .header { background-color: #1a1b3b; padding: 20px; text-align: center; border-bottom: 2px solid #4fb7b3; }
+            .content { padding: 30px; }
+            .footer { background-color: #0f1025; padding: 20px; text-align: center; color: #8892b0; font-size: 12px; }
+            h1 { color: #ffffff; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+            h2 { color: #4fb7b3; margin-top: 0; }
+            p { line-height: 1.6; color: #cbd5e1; }
+            .details { background-color: rgba(79, 183, 179, 0.1); padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid rgba(79, 183, 179, 0.3); }
+            .label { color: #4fb7b3; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+            .value { color: #ffffff; font-size: 16px; margin-bottom: 10px; display: block; }
+            .button { display: inline-block; padding: 12px 24px; background-color: #4fb7b3; color: #000000; text-decoration: none; font-weight: bold; border-radius: 6px; text-transform: uppercase; margin-top: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>EHD Tour 2026</h1>
+            </div>
+            <div class="content">
+                <h2>Registration Confirmed</h2>
+                <p>Hi ${data.parentFirstName},</p>
+                <p>Thank you for registering <strong>${data.playerName}</strong> for the EHD x RHC 2026 Spring Tour. We have successfully received your information.</p>
+                
+                <div class="details">
+                    <span class="label">Package</span>
+                    <span class="value">${data.packageName || 'Standard Package'}</span>
+                    
+                    <span class="label">Level</span>
+                    <span class="value">${data.level} ${data.level === 'Other' ? `(${data.levelOther})` : ''}</span>
+                    
+                    <span class="label">Team</span>
+                    <span class="value">${data.team}</span>
+                </div>
+
+                <p>We will be reviewing your registration and will contact you shortly with further details regarding the next steps.</p>
+                
+                <a href="#" class="button">Visit Website</a>
+            </div>
+            <div class="footer">
+                <p>&copy; 2026 EHD Tour. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+};
+
+const sendConfirmationEmail = async (registrationData) => {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.log('Email credentials not set. Skipping email.');
+        return;
+    }
+
+    try {
+        const info = await transporter.sendMail({
+            from: '"EHD Tour Registration" <' + process.env.EMAIL_USER + '>',
+            to: registrationData.email,
+            subject: "Registration Confirmed - EHD Tour 2026",
+            html: createEmailTemplate(registrationData),
+        });
+        console.log("Message sent: %s", info.messageId);
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
+};
+
 
 // Delete question endpoint
 app.delete('/api/questions/:id', (req, res) => {
