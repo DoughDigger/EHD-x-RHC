@@ -374,86 +374,8 @@ const App: React.FC = () => {
     }
   ];
 
-  const RegistrationSection = () => {
-    return (
-      <section id="register" className="relative min-h-screen py-8 md:py-12 lg:py-16 pt-16 md:pt-20 lg:pt-24 px-4 md:px-10 flex flex-col snap-start bg-[#0a0b1a]">
-        <div className="max-w-7xl mx-auto w-full flex-grow flex flex-col justify-center">
-          <div className="flex flex-col items-center mb-6 md:mb-8 text-center relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <GradientText
-                text="REGISTER YOUR INTEREST"
-                className="text-3xl md:text-5xl font-heading font-black tracking-tighter"
-              />
-            </motion.div>
-
-          </div>
-
-          <div className="relative">
-            {!isRegistered ? (
-              <CommitmentForm
-                onSubmit={handleCommitmentSubmit}
-                isInline={true}
-                onQuestionClick={() => setIsQuestionFormOpen(true)}
-              />
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="max-w-4xl mx-auto bg-[#1a1b3b] border border-[#4fb7b3]/30 rounded-2xl p-12 text-center shadow-2xl shadow-[#4fb7b3]/10"
-              >
-                <div className="p-4 rounded-full bg-[#4fb7b3]/20 border border-[#4fb7b3]/30 w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                  <Trophy className="w-10 h-10 text-[#4fb7b3]" />
-                </div>
-                <h3 className="text-3xl font-heading font-bold text-white mb-4 uppercase tracking-widest">
-                  Interest Registered!
-                </h3>
-                <p className="text-gray-400 font-mono text-lg mb-8">
-                  Thank you for your interest in the EHD x RHC 2026 Spring Tour. Our team will contact you shortly with further details.
-                </p>
-                <button
-                  onClick={() => setIsRegistered(false)}
-                  className="px-8 py-3 border border-white/20 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-white hover:text-black transition-all"
-                >
-                  Register Another Player
-                </button>
-              </motion.div>
-            )}
-          </div>
-        </div>
-
-        {/* Integrated Footer */}
-        <footer className="w-full border-t border-white/10 py-8 mt-12">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-            <div>
-              <div className="font-heading text-xl md:text-2xl font-bold tracking-tighter mb-1 text-white">RHC INVITE</div>
-              <div className="flex gap-2 text-[10px] font-mono text-gray-400">
-                <span>Official Registration Portal</span>
-              </div>
-            </div>
-
-            <div className="flex gap-6 flex-wrap">
-              <button
-                onClick={() => setAdminLoginOpen(true)}
-                className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
-              >
-                Admin
-              </button>
-              <button
-                onClick={() => setIsQuestionFormOpen(true)}
-                className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
-              >
-                Contact
-              </button>
-            </div>
-          </div>
-        </footer>
-      </section>
-    );
-  };
+  // RegistrationSection component definition removed to prevent re-renders
+  // JSX moved directly to main return statement
 
   return (
     <div
@@ -1190,6 +1112,85 @@ const App: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* REGISTRATION SECTION - Inlined to prevent re-renders */}
+      {/* UPDATE: Increased top padding from pt-16 md:pt-20 lg:pt-24 to pt-24 md:pt-32 lg:pt-40 to prevent header overlap */}
+      <section id="register" className="relative min-h-screen py-8 md:py-12 lg:py-16 pt-24 md:pt-32 lg:pt-40 px-4 md:px-10 flex flex-col snap-start bg-[#0a0b1a]">
+        <div className="max-w-7xl mx-auto w-full flex-grow flex flex-col justify-center">
+          <div className="flex flex-col items-center mb-6 md:mb-8 text-center relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <GradientText
+                text="REGISTER YOUR INTEREST"
+                className="text-3xl md:text-5xl font-heading font-black tracking-tighter"
+              />
+            </motion.div>
+
+          </div>
+
+          <div className="relative">
+            {!isRegistered ? (
+              <CommitmentForm
+                onSubmit={handleCommitmentSubmit}
+                isInline={true}
+                onQuestionClick={() => setIsQuestionFormOpen(true)}
+              />
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="max-w-4xl mx-auto bg-[#1a1b3b] border border-[#4fb7b3]/30 rounded-2xl p-12 text-center shadow-2xl shadow-[#4fb7b3]/10"
+              >
+                <div className="p-4 rounded-full bg-[#4fb7b3]/20 border border-[#4fb7b3]/30 w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <Trophy className="w-10 h-10 text-[#4fb7b3]" />
+                </div>
+                <h3 className="text-3xl font-heading font-bold text-white mb-4 uppercase tracking-widest">
+                  Interest Registered!
+                </h3>
+                <p className="text-gray-400 font-mono text-lg mb-8">
+                  Thank you for your interest in the EHD x RHC 2026 Spring Tour. Our team will contact you shortly with further details.
+                </p>
+                <button
+                  onClick={() => setIsRegistered(false)}
+                  className="px-8 py-3 border border-white/20 text-white font-bold uppercase tracking-widest rounded-lg hover:bg-white hover:text-black transition-all"
+                >
+                  Register Another Player
+                </button>
+              </motion.div>
+            )}
+          </div>
+        </div>
+
+        {/* Integrated Footer */}
+        <footer className="w-full border-t border-white/10 py-8 mt-12">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+              <div className="font-heading text-xl md:text-2xl font-bold tracking-tighter mb-1 text-white">RHC INVITE</div>
+              <div className="flex gap-2 text-[10px] font-mono text-gray-400">
+                <span>Official Registration Portal</span>
+              </div>
+            </div>
+
+            <div className="flex gap-6 flex-wrap">
+              <button
+                onClick={() => setAdminLoginOpen(true)}
+                className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
+              >
+                Admin
+              </button>
+              <button
+                onClick={() => setIsQuestionFormOpen(true)}
+                className="text-gray-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors cursor-pointer"
+              >
+                Contact
+              </button>
+            </div>
+          </div>
+        </footer>
+      </section>
 
       {/* Admin Features */}
       <AdminLogin
