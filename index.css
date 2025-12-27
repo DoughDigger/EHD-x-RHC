@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Global Styles for Mobile and Tablet Optimization */
 
 * {
@@ -84,15 +88,15 @@ body {
   .safe-top {
     padding-top: max(1rem, env(safe-area-inset-top));
   }
-  
+
   .safe-bottom {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
-  
+
   .safe-left {
     padding-left: max(1rem, env(safe-area-inset-left));
   }
-  
+
   .safe-right {
     padding-right: max(1rem, env(safe-area-inset-right));
   }
