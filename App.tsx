@@ -89,7 +89,7 @@ const DIVISIONS: Artist[] = [
     name: 'Pricing',
     genre: 'Packages',
     day: 'APR 18-19',
-    image: '/pricing_tile.jpg',
+    image: '/pricing_tile_v2.jpg',
     description: '',
     thrillSection: {
       title: 'What\'s Included',
