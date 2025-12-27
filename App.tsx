@@ -663,14 +663,14 @@ const App: React.FC = () => {
       {/* DIVISIONS SECTION */}
       <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-48 md:pt-64 pb-16 md:pb-24 px-4 ${!isMobile ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6 flex flex-col h-full justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-white/10 bg-black/20 backdrop-blur-sm">
-            {/* Full-width Title Tile */}
-            <div className="col-span-1 md:col-span-3 py-8 md:py-12 px-8 md:px-12 border-b border-r border-white/20 bg-black/40 flex items-center justify-center md:justify-start">
-              <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg whitespace-nowrap overflow-hidden text-ellipsis">
-                Experience the Class and Skill of <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
-              </h2>
-            </div>
+          {/* Section Header */}
+          <div className="mb-8 md:mb-12 px-2 md:px-4">
+            <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg whitespace-nowrap overflow-hidden text-ellipsis">
+              Experience the Class and Skill of <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
+            </h2>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-3 border-t border-l border-white/10 bg-black/20 backdrop-blur-sm">
             {DIVISIONS.map((division) => (
               <ArtistCard key={division.id} artist={division} onClick={() => setSelectedDivision(division)} />
             ))}
