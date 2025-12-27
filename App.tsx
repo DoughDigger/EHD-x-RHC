@@ -10,6 +10,8 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 // Import Icons
 import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight, Star, Plane, Utensils, MapPinned, Hotel, Bus, HelpCircle } from 'lucide-react';
 
+// Import global styles
+import './index.css';
 
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
@@ -20,6 +22,7 @@ import AdminDashboard from './components/AdminDashboard';
 import QuestionForm from './components/QuestionForm';
 import { Artist } from './types';
 import { useMobile } from './hooks/useMobile';
+import { useDevice } from './hooks/useDevice';
 
 // RHC Tournament Data
 const DIVISIONS: Artist[] = [
@@ -232,6 +235,7 @@ const App: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: containerRef });
   const isMobile = useMobile();
+  const device = useDevice();
 
   // Parallax for Hero
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 100]);
@@ -370,10 +374,9 @@ const App: React.FC = () => {
     }
   ];
 
-  // SECTION: REGISTRATION SECTION
   const RegistrationSection = () => {
     return (
-      <section id="register" className="relative min-h-screen py-12 md:py-16 pt-20 md:pt-24 px-4 md:px-10 flex flex-col snap-start bg-[#0a0b1a]">
+      <section id="register" className="relative min-h-screen py-8 md:py-12 lg:py-16 pt-16 md:pt-20 lg:pt-24 px-4 md:px-10 flex flex-col snap-start bg-[#0a0b1a]">
         <div className="max-w-7xl mx-auto w-full flex-grow flex flex-col justify-center">
           <div className="flex flex-col items-center mb-6 md:mb-8 text-center relative">
             <motion.div
@@ -455,14 +458,14 @@ const App: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className={`relative h-screen w-full overflow-y-scroll overflow-x-hidden bg-transparent text-white scroll-smooth ${!isMobile ? 'snap-y snap-mandatory' : ''}`}
+      className={`relative h-screen w-full overflow-y-scroll overflow-x-hidden bg-transparent text-white scroll-smooth custom-scrollbar ${device.isDesktop ? 'snap-y snap-mandatory' : ''}`}
     >
       <FluidBackground />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center px-4 md:px-8 py-4 md:py-6 pointer-events-none">
-        {/* Desktop Menu - Centered Pill */}
-        <div className="hidden md:flex items-center gap-1 p-1.5 bg-black/30 backdrop-blur-xl border border-white/10 rounded-full pointer-events-auto shadow-2xl shadow-black/20 transform hover:scale-[1.02] transition-transform duration-300">
+        {/* Desktop Menu - Centered Pill - Show on tablet and up */}
+        <div className="hidden lg:flex items-center gap-1 p-1.5 bg-black/50 backdrop-blur-xl border border-white/10 rounded-full pointer-events-auto shadow-2xl shadow-black/20 transform hover:scale-[1.02] transition-transform duration-300">
           {['Tournament', 'Agenda', 'Experience', 'Register'].map((item) => (
             <button
               key={item}
@@ -475,12 +478,12 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Menu Toggle - Positioned to avoid logo overlap */}
         <button
-          className="md:hidden text-white absolute right-6 top-6 z-50 w-10 h-10 flex items-center justify-center pointer-events-auto bg-black/20 backdrop-blur-md rounded-full border border-white/10"
+          className="lg:hidden text-white fixed right-4 top-4 z-50 w-12 h-12 flex items-center justify-center pointer-events-auto bg-black/60 backdrop-blur-md rounded-full border border-white/10 shadow-lg touch-target"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
 
@@ -491,7 +494,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            className="fixed inset-0 z-40 bg-[#1a1b3b] backdrop-blur-2xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 z-40 bg-[#1a1b3b] backdrop-blur-2xl flex flex-col items-center justify-center gap-8 lg:hidden"
           >
             {['Tournament', 'Agenda', 'Experience', 'Register'].map((item) => (
               <button
@@ -513,23 +516,23 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       {/* HERO SECTION */}
-      <header className={`relative h-screen w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 ${!isMobile ? 'snap-start' : ''}`}>
+      <header className={`relative h-screen w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 ${device.isDesktop ? 'snap-start' : ''}`}>
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="z-10 text-center flex flex-col items-center w-full max-w-screen-2xl pb-8 md:pb-8"
+          className="z-10 text-center flex flex-col items-center w-full max-w-screen-2xl pb-20 md:pb-8"
         >
           {/* Logos */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.1 }}
-            className="flex items-center gap-8 md:gap-16 mb-4 md:mb-6"
+            className="flex items-center gap-6 md:gap-8 lg:gap-16 mb-4 md:mb-6"
           >
-            <img src="/ehd_logo_user_v5.png" alt="EHD Logo" className="h-72 md:h-120 object-contain drop-shadow-2xl" />
+            <img src="/ehd_logo_user_v5.png" alt="EHD Logo" className="h-48 md:h-72 lg:h-96 object-contain drop-shadow-2xl" />
 
             {/* Animated crossed lines separator */}
             <motion.div
-              className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center"
+              className="relative w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center"
             >
               <motion.div
                 className="absolute w-full h-0.5 bg-gradient-to-r from-[#4fb7b3] to-[#a8fbd3] shadow-lg"
@@ -573,7 +576,7 @@ const App: React.FC = () => {
               />
             </motion.div>
 
-            <img src="/rhc_logo_latest.png" alt="RHC Logo" className="h-72 md:h-120 object-contain drop-shadow-2xl mix-blend-screen" />
+            <img src="/rhc_logo_latest.png" alt="RHC Logo" className="h-48 md:h-72 lg:h-96 object-contain drop-shadow-2xl mix-blend-screen" />
           </motion.div>
 
           {/* Date / Location */}
@@ -631,17 +634,17 @@ const App: React.FC = () => {
               scale: { duration: 0.2, ease: "easeInOut" }
             }}
             onClick={() => scrollToSection('register')}
-            className="group relative px-8 md:px-12 py-4 md:py-6 bg-[#4fb7b3] text-black font-heading font-bold text-base md:text-2xl uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(79,183,179,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] flex items-center gap-4 overflow-hidden"
+            className="group relative px-6 md:px-10 lg:px-12 py-3 md:py-5 lg:py-6 bg-[#4fb7b3] text-black font-heading font-bold text-sm md:text-xl lg:text-2xl uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(79,183,179,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] flex items-center gap-3 overflow-hidden touch-target mb-6 md:mb-0"
           >
             <span className="relative z-10">Register Your Interest</span>
-            <ArrowRight className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
             <div className="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
           </motion.button>
 
         </motion.div>
 
-        {/* MARQUEE */}
-        <div className="absolute bottom-4 md:bottom-12 left-0 w-full py-2 md:py-4 bg-white text-black z-20 overflow-hidden border-y-2 md:border-y-4 border-black shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+        {/* MARQUEE - positioned with enough space above for CTA button */}
+        <div className="absolute bottom-0 left-0 w-full py-2 md:py-3 lg:py-4 bg-white text-black z-20 overflow-hidden border-y-2 md:border-y-4 border-black shadow-[0_0_30px_rgba(255,255,255,0.3)]">
           <motion.div
             className="flex w-fit will-change-transform"
             animate={{ x: "-50%" }}
@@ -650,8 +653,8 @@ const App: React.FC = () => {
             {[0, 1].map((key) => (
               <div key={key} className="flex whitespace-nowrap shrink-0">
                 {[...Array(2)].map((_, i) => (
-                  <span key={i} className="text-sm md:text-3xl font-heading font-black px-4 md:px-6 flex items-center gap-3">
-                    EHD Spring Tour x Riga Hockey Cup 2026 | U14 (born 2012) AA/AAA | Travel Date: April 13 to April 20 <span className="text-black text-xs md:text-3xl">●</span>
+                  <span key={i} className="text-xs md:text-2xl lg:text-3xl font-heading font-black px-3 md:px-4 lg:px-6 flex items-center gap-2 md:gap-3">
+                    EHD Spring Tour x Riga Hockey Cup 2026 | U14 (born 2012) AA/AAA | Travel Date: April 13 to April 20 <span className="text-black text-xs md:text-2xl lg:text-3xl">●</span>
                   </span>
                 ))}
               </div>
@@ -661,11 +664,11 @@ const App: React.FC = () => {
       </header>
 
       {/* DIVISIONS SECTION */}
-      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-24 md:pt-32 pb-16 md:pb-24 px-4 ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-24 md:pt-28 lg:pt-32 pb-12 md:pb-16 lg:pb-24 px-4 ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6 flex flex-col h-full justify-center">
           {/* Section Header */}
-          <div className="mb-8 md:mb-12 px-2 md:px-4">
-            <h2 className="text-lg md:text-2xl lg:text-3xl xl:text-4xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg whitespace-nowrap overflow-hidden text-ellipsis">
+          <div className="mb-6 md:mb-10 lg:mb-12 px-2 md:px-4">
+            <h2 className="text-base md:text-xl lg:text-2xl xl:text-3xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg">
               Experience the Class and Skill of <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
             </h2>
           </div>
@@ -679,7 +682,7 @@ const App: React.FC = () => {
       </section>
 
       {/* AGENDA SECTION */}
-      <section id="agenda" className={`relative h-screen w-full shrink-0 flex flex-col justify-center py-8 md:py-10 px-4 bg-black/10 backdrop-blur-sm border-t border-white/10 ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-6 md:py-8 lg:py-10 px-4 bg-black/10 backdrop-blur-sm border-t border-white/10 ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="max-w-7xl w-full mx-auto px-4 md:px-6">
           {/* Section Header */}
           <div className="text-center mb-3 md:mb-4">
@@ -706,7 +709,7 @@ const App: React.FC = () => {
           </div>
 
           {/* Compact Timeline Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 max-h-[calc(100vh-220px)] overflow-y-auto custom-scrollbar">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 max-h-[calc(100vh-280px)] md:max-h-[calc(100vh-240px)] overflow-y-auto custom-scrollbar">
             {TRIP_SCHEDULE.map((day, dayIndex) => {
               // Helper function to get icon based on activity type and description
               const getIcon = (type: string, description: string) => {
@@ -823,20 +826,20 @@ const App: React.FC = () => {
       </section>
 
       {/* EXPERIENCE SECTION */}
-      <section id="experience" className={`relative h-screen w-full shrink-0 flex flex-col justify-center py-16 md:py-20 pb-20 md:pb-24 bg-black/20 backdrop-blur-sm border-t border-white/10 overflow-hidden ${!isMobile ? 'snap-start' : ''}`}>
+      <section id="experience" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 lg:py-20 pb-16 md:pb-20 lg:pb-24 bg-black/20 backdrop-blur-sm border-t border-white/10 overflow-hidden ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="absolute top-1/2 right-[-20%] w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] bg-[#4fb7b3]/20 rounded-full blur-[40px] pointer-events-none will-change-transform" style={{ transform: 'translateZ(0)' }} />
 
-        <div className="max-w-6xl w-full mx-auto px-6 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center">
+        <div className="max-w-6xl w-full mx-auto px-4 md:px-6 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-12 items-center">
             <div className="lg:col-span-5 order-2 lg:order-1">
-              <h2 className="text-3xl md:text-5xl font-heading font-bold mb-4 leading-tight">
-                Beyond <br /> <GradientText text="THE ICE" className="text-3xl md:text-5xl" />
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-bold mb-3 md:mb-4 leading-tight">
+                Beyond <br /> <GradientText text="THE ICE" className="text-2xl md:text-4xl lg:text-5xl" />
               </h2>
-              <p className="text-sm md:text-base text-gray-200 mb-6 font-light leading-relaxed drop-shadow-md">
+              <p className="text-sm md:text-base text-gray-200 mb-4 md:mb-6 font-light leading-relaxed drop-shadow-md">
                 Experience the "Culture Capital of the Baltics." Beyond the world-class hockey, Riga is an architectural pearl where 800 years of Gothic, Medieval, and Art Nouveau history meet the pulse of modern European life.
               </p>
 
-              <div className="space-y-4 md:space-y-5">
+              <div className="space-y-3 md:space-y-4 lg:space-y-5">
                 {[
                   { icon: Shield, title: 'Architectural Pearl', desc: 'Explore 800 years of heritage, from Gothic cathedrals to exquisite Art Nouveau.' },
                   { icon: Zap, title: 'Capital of Gastronomy', desc: 'A fusion of traditional Latvian meals and astonishing modern combinations.' },
@@ -858,7 +861,7 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-7 relative h-[350px] md:h-[500px] w-full order-1 lg:order-2">
+            <div className="lg:col-span-7 relative h-[280px] md:h-[400px] lg:h-[500px] w-full order-1 lg:order-2">
               <div className="absolute inset-0 bg-gradient-to-br from-[#637ab9] to-[#4fb7b3] rounded-2xl rotate-3 opacity-30 blur-xl" />
               <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 group shadow-2xl bg-black/40">
                 <AnimatePresence mode="wait">
@@ -876,20 +879,19 @@ const App: React.FC = () => {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
 
-                {/* Navigation Controls */}
-                <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 flex items-center justify-between z-10">
-                  <div className="flex gap-2">
+                {/* Navigation Controls - Better positioning */}
+                <div className="absolute inset-x-0 bottom-0 p-4 md:p-6 lg:p-8 flex items-center justify-between z-10">
+                  <div className="flex gap-1.5 md:gap-2">
                     {CAROUSEL_IMAGES.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setCurrentImageIndex(i)}
-                        className={`h-1.5 rounded-full transition-all duration-500 ${currentImageIndex === i ? 'bg-[#a8fbd3] w-8' : 'bg-white/30 hover:bg-white/50 w-2'
-                          }`}
+                        className={`h-1 md:h-1.5 rounded-full transition-all duration-500 ${currentImageIndex === i ? 'bg-[#a8fbd3] w-6 md:w-8' : 'bg-white/30 hover:bg-white/50 w-1.5 md:w-2'}`}
                         aria-label={`Go to slide ${i + 1}`}
                       />
                     ))}
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2 md:gap-3">
                     <button
                       onClick={(e) => { e.stopPropagation(); prevImage(); }}
                       className="p-3 rounded-full bg-black/20 backdrop-blur-xl border border-white/10 hover:bg-black/40 hover:border-[#a8fbd3]/50 transition-all duration-300"
@@ -952,17 +954,17 @@ const App: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full md:w-[95vw] h-full md:h-[90vh] bg-[#1a1b3b] border-t md:border border-white/10 overflow-hidden flex flex-col md:flex-row shadow-2xl shadow-[#4fb7b3]/10 group/modal rounded-t-[2rem] md:rounded-xl"
             >
-              {/* Close Button - Fixed to Corner */}
+              {/* Close Button - Fixed to Corner with better touch target */}
               <button
                 onClick={() => setSelectedDivision(null)}
-                className="absolute top-6 right-6 z-50 p-2.5 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10"
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-50 p-3 md:p-2.5 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors border border-white/10 touch-target"
                 data-hover="true"
               >
                 <X className="w-6 h-6" />
               </button>
 
               {/* Image Side - Fixed on Desktop */}
-              <div className="w-full md:w-1/2 h-48 md:h-full relative overflow-hidden shrink-0">
+              <div className="w-full md:w-1/2 h-56 md:h-full relative overflow-hidden shrink-0">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={`${selectedDivision.id}-${subCarouselIndex}`}
