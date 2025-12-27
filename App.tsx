@@ -8,7 +8,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 // Import Icons
-import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight, Star, Plane, Utensils, MapPinned, Hotel, Bus, HelpCircle } from 'lucide-react';
+// Import Icons
+import { Trophy, Users, Zap, Shield, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Activity, Target, ArrowRight, Star, Plane, Utensils, MapPinned, Hotel, Bus, HelpCircle, Globe, Instagram, Youtube } from 'lucide-react';
 
 // Import global styles
 import './index.css';
@@ -23,6 +24,21 @@ import QuestionForm from './components/QuestionForm';
 import { Artist } from './types';
 import { useMobile } from './hooks/useMobile';
 import { useDevice } from './hooks/useDevice';
+
+// Custom Icons
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 // RHC Tournament Data
 const DIVISIONS: Artist[] = [
@@ -123,6 +139,13 @@ const CAROUSEL_IMAGES = [
   '/beyond_ice_8.jpg',
   '/beyond_ice_9.jpg',
   '/beyond_ice_10.jpg'
+];
+
+const SOCIAL_LINKS = [
+  { icon: Globe, url: 'https://www.rhc.lv/en/u14-aa4/teams', label: 'Website' },
+  { icon: Instagram, url: 'https://www.instagram.com/riga_hockey_cup/', label: 'Instagram' },
+  { icon: TikTokIcon, url: 'https://www.tiktok.com/@rigahockeycup?is_from_webapp=1&sender_device=pc', label: 'TikTok' },
+  { icon: Youtube, url: 'https://www.youtube.com/@rigahockeycup4240', label: 'YouTube' }
 ];
 
 // Trip Schedule Data
@@ -271,6 +294,7 @@ const App: React.FC = () => {
   const [adminDashboardOpen, setAdminDashboardOpen] = useState(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
   const [isQuestionFormOpen, setIsQuestionFormOpen] = useState(false);
+  const [selectedMobileDayIndex, setSelectedMobileDayIndex] = useState(0);
 
   const handleAdminLoginSuccess = (token: string) => {
     setAdminToken(token);
@@ -437,67 +461,66 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       {/* HERO SECTION */}
-      <header className={`relative h-screen w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 ${device.isDesktop ? 'snap-start' : ''}`}>
+      <header className={`relative h-[100dvh] w-full shrink-0 flex flex-col items-center justify-center overflow-hidden px-4 md:px-4 bg-black/20 backdrop-blur-sm ${device.isDesktop ? 'snap-start' : ''}`}>
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
-          className="z-10 text-center flex flex-col items-center w-full max-w-screen-2xl pb-20 md:pb-8 pt-24 md:pt-0"
+          className="z-10 text-center flex flex-col items-center w-full max-w-screen-2xl pb-36 md:pb-20 pt-16 md:pt-0"
         >
           {/* Logos */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.1 }}
-            className="flex items-center gap-6 md:gap-8 lg:gap-16 mb-4 md:mb-6"
+            className="flex items-center gap-6 md:gap-8 lg:gap-16 mb-4 md:mb-3 mt-12"
           >
             <img src="/ehd_logo_user_v5.png" alt="EHD Logo" className="h-32 md:h-56 lg:h-96 object-contain drop-shadow-2xl" />
 
             {/* Animated crossed lines separator */}
             <motion.div
-              className="relative w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center"
+              className="relative w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center p-2"
+              animate={{
+                scale: [1, 1.15, 1],
+                opacity: [0.7, 1, 0.7],
+                filter: ["brightness(1)", "brightness(2)", "brightness(1)"]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
-              <motion.div
-                className="absolute w-full h-0.5 bg-gradient-to-r from-[#4fb7b3] to-[#a8fbd3] shadow-lg"
+              <div
+                className="absolute w-full h-0.5 bg-[#4fb7b3] shadow-[0_0_10px_rgba(79,183,179,0.5)]"
                 style={{ transform: 'rotate(45deg)' }}
-                animate={{
-                  opacity: [0.4, 0.4, 1, 1, 0.4],
-                  boxShadow: [
-                    '0 0 5px rgba(79, 183, 179, 0.3)',
-                    '0 0 5px rgba(79, 183, 179, 0.3)',
-                    '0 0 20px rgba(79, 183, 179, 0.8), 0 0 40px rgba(168, 251, 211, 0.6)',
-                    '0 0 20px rgba(79, 183, 179, 0.8), 0 0 40px rgba(168, 251, 211, 0.6)',
-                    '0 0 5px rgba(79, 183, 179, 0.3)'
-                  ]
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  times: [0, 0.4, 0.5, 0.6, 1]
-                }}
               />
-              <motion.div
-                className="absolute w-full h-0.5 bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3] shadow-lg"
+              <div
+                className="absolute w-full h-0.5 bg-[#4fb7b3] shadow-[0_0_10px_rgba(79,183,179,0.5)]"
                 style={{ transform: 'rotate(-45deg)' }}
-                animate={{
-                  opacity: [0.4, 0.4, 1, 1, 0.4],
-                  boxShadow: [
-                    '0 0 5px rgba(168, 251, 211, 0.3)',
-                    '0 0 5px rgba(168, 251, 211, 0.3)',
-                    '0 0 20px rgba(168, 251, 211, 0.8), 0 0 40px rgba(79, 183, 179, 0.6)',
-                    '0 0 20px rgba(168, 251, 211, 0.8), 0 0 40px rgba(79, 183, 179, 0.6)',
-                    '0 0 5px rgba(168, 251, 211, 0.3)'
-                  ]
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  times: [0, 0.4, 0.5, 0.6, 1]
-                }}
               />
             </motion.div>
 
             <img src="/rhc_logo_latest.png" alt="RHC Logo" className="h-32 md:h-56 lg:h-96 object-contain drop-shadow-2xl mix-blend-screen" />
+          </motion.div>
+
+          {/* Social Icons (Desktop Position: Above Pill) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="hidden md:flex items-center justify-center gap-6 mb-1"
+          >
+            {SOCIAL_LINKS.map((social, index) => (
+              <a
+                key={index}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white hover:text-[#a8fbd3] hover:bg-white/10 hover:shadow-[0_0_15px_rgba(79,183,179,0.3)] hover:scale-110 transition-all duration-300 group"
+                aria-label={social.label}
+              >
+                <social.icon className="w-6 h-6 group-hover:drop-shadow-[0_0_8px_rgba(168,251,211,0.5)]" />
+              </a>
+            ))}
           </motion.div>
 
           {/* Date / Location */}
@@ -505,11 +528,42 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-[10px] md:text-sm font-mono text-[#a8fbd3] tracking-[0.2em] md:tracking-[0.2em] uppercase mb-3 md:mb-4 bg-black/30 px-5 py-3 rounded-full backdrop-blur-md border border-white/5"
+            className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-[10px] md:text-sm font-mono text-[#a8fbd3] tracking-[0.2em] md:tracking-[0.2em] uppercase mb-2 md:mb-2 bg-black/30 px-5 py-3 rounded-2xl md:rounded-full backdrop-blur-md border border-white/5"
           >
-            <span className="font-bold text-white">Riga, Latvia</span>
-            <span className="hidden md:block w-1.5 h-1.5 bg-[#4fb7b3] rounded-full animate-pulse" />
-            <span className="text-center">U14 (born 2012) AA/AAA | Travel Dates Apr 13-20, 2026 | Tournament: Apr 17-19, 2026</span>
+            {/* Mobile Layout */}
+            <div className="flex flex-col items-center gap-1.5 md:hidden text-center">
+              <span className="font-bold text-white leading-tight">Riga, Latvia <span className="text-[#4fb7b3]">|</span> U14 (born 2012) AA/AAA</span>
+              <span className="leading-tight">Travel Dates Apr 13-20, 2026</span>
+              <span className="leading-tight">Tournament: Apr 17-19, 2026</span>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden md:contents">
+              <span className="font-bold text-white">Riga, Latvia</span>
+              <span className="w-1.5 h-1.5 bg-[#4fb7b3] rounded-full animate-pulse" />
+              <span className="text-center">U14 (born 2012) AA/AAA | Travel Dates Apr 13-20, 2026 | Tournament: Apr 17-19, 2026</span>
+            </div>
+          </motion.div>
+
+          {/* Social Icons (Mobile Position: Below Pill) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="flex md:hidden items-center justify-between w-full max-w-[280px] gap-0 mb-3 px-4"
+          >
+            {SOCIAL_LINKS.map((social, index) => (
+              <a
+                key={index}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-full bg-black/30 backdrop-blur-md border border-white/10 text-white hover:text-[#a8fbd3] hover:bg-white/10 hover:shadow-[0_0_15px_rgba(79,183,179,0.3)] hover:scale-110 transition-all duration-300 group"
+                aria-label={social.label}
+              >
+                <social.icon className="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(168,251,211,0.5)]" />
+              </a>
+            ))}
           </motion.div>
 
           {/* Main Title */}
@@ -538,7 +592,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="text-sm md:text-xl font-light max-w-screen-2xl mx-auto text-white/90 leading-relaxed drop-shadow-lg px-6 mb-6 md:mb-8"
+            className="text-sm md:text-xl font-light max-w-screen-2xl mx-auto text-white/90 leading-relaxed drop-shadow-lg px-6 mb-3 md:mb-4"
           >
             Celebrate the 20th Anniversary of Europe’s largest youth ice hockey tournament! The EHD Spring Tour invites you to Riga, Latvia, for an elite competition featuring top talent from Europe's hockey powerhouses such as Sweden, Finland, Czechia, Switzerland amongst others. Join over 250 teams for world-class hockey and an unforgettable international experience in one of Europe’s most passionate hockey cities.
           </motion.p>
@@ -585,10 +639,10 @@ const App: React.FC = () => {
       </header>
 
       {/* DIVISIONS SECTION */}
-      <section id="tournament" className={`relative h-screen w-full shrink-0 flex flex-col pt-24 md:pt-28 lg:pt-32 pb-12 md:pb-16 lg:pb-24 px-4 ${device.isDesktop ? 'snap-start' : ''}`}>
+      <section id="tournament" className={`relative min-h-screen md:h-screen w-full shrink-0 flex flex-col pt-32 md:pt-28 lg:pt-32 pb-12 md:pb-16 lg:pb-24 px-4 bg-black/20 backdrop-blur-sm ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="max-w-[1400px] w-full mx-auto px-2 md:px-6 flex flex-col h-full justify-center">
           {/* Section Header */}
-          <div className="mb-6 md:mb-10 lg:mb-12 px-2 md:px-4">
+          <div className="mb-6 md:mb-10 lg:mb-12 px-2 md:px-4 relative z-10">
             <h2 className="text-base md:text-xl lg:text-2xl xl:text-3xl font-heading font-bold uppercase leading-[1.1] drop-shadow-lg">
               Experience the Class and Skill of <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a8fbd3] to-[#4fb7b3]">Euro Hockey</span>
             </h2>
@@ -603,7 +657,7 @@ const App: React.FC = () => {
       </section>
 
       {/* AGENDA SECTION */}
-      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 lg:py-20 px-4 bg-[#0d0e23] border-t border-white/10 ${device.isDesktop ? 'snap-start' : ''}`}>
+      <section id="agenda" className={`relative min-h-screen w-full shrink-0 flex flex-col justify-center py-12 md:py-16 lg:py-20 px-4 border-t border-white/10 bg-black/20 backdrop-blur-sm ${device.isDesktop ? 'snap-start' : ''}`}>
         <div className="max-w-7xl w-full mx-auto px-4 md:px-6">
           {/* Section Header */}
           <div className="text-center mb-3 md:mb-4">
@@ -630,118 +684,194 @@ const App: React.FC = () => {
           </div>
 
           {/* Compact Timeline Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 max-h-[calc(100vh-280px)] md:max-h-[calc(100vh-240px)] overflow-y-auto custom-scrollbar">
-            {TRIP_SCHEDULE.map((day, dayIndex) => {
-              // Helper function to get icon based on activity type and description
-              const getIcon = (type: string, description: string) => {
-                switch (type) {
-                  case 'departure':
-                  case 'arrival':
-                    return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
-                  case 'transfer':
-                    // Check if it's airport transfer or local transfer
-                    if (description.toLowerCase().includes('airport')) {
-                      return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
-                    } else {
-                      return <Bus className="w-4 h-4 md:w-5 md:h-5" />;
-                    }
-                  case 'game':
-                    return <Activity className="w-4 h-4 md:w-5 md:h-5" />;
-                  case 'meal':
-                    return <Utensils className="w-4 h-4 md:w-5 md:h-5" />;
-                  case 'tour':
-                    return <MapPinned className="w-4 h-4 md:w-5 md:h-5" />;
-                  case 'tournament':
-                    return <Trophy className="w-4 h-4 md:w-5 md:h-5" />;
-                  case 'free':
-                    return <Hotel className="w-4 h-4 md:w-5 md:h-5" />;
-                  default:
-                    return <Calendar className="w-4 h-4 md:w-5 md:h-5" />;
-                }
-              };
+          <div className={`
+             ${isMobile
+              ? 'flex flex-col h-full'
+              : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 max-h-[calc(100vh-280px)] md:max-h-[calc(100vh-240px)] overflow-y-auto custom-scrollbar'}
+          `}>
+            {isMobile && (
+              <div className="mb-6 overflow-x-auto pb-4 no-scrollbar flex items-center gap-3">
+                {TRIP_SCHEDULE.map((day, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedMobileDayIndex(idx)}
+                    className={`flex flex-col items-center justify-center min-w-[60px] h-[70px] rounded-xl border transition-all duration-300 ${selectedMobileDayIndex === idx
+                      ? day.tournament
+                        ? 'bg-[#4fb7b3] border-[#4fb7b3] text-black shadow-lg shadow-[#4fb7b3]/20 scale-105'
+                        : 'bg-white text-black border-white shadow-lg'
+                      : 'bg-white/5 border-white/10 text-gray-400'
+                      }`}
+                  >
+                    <span className={`text-[10px] font-bold uppercase tracking-wider ${selectedMobileDayIndex === idx ? 'opacity-100' : 'opacity-60'}`}>{day.day}</span>
+                    <span className="text-xl font-black">{day.dayNum}</span>
+                    {day.tournament && selectedMobileDayIndex !== idx && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#4fb7b3] mt-1" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
 
-              return (
-                <motion.div
-                  key={dayIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: dayIndex * 0.05 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  whileHover={{ y: -3 }}
-                  className={`group relative p-2 md:p-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${day.tournament
-                    ? 'bg-gradient-to-br from-[#4fb7b3]/20 to-[#637ab9]/20 border-[#4fb7b3]/30 hover:border-[#4fb7b3]/50 hover:bg-[#4fb7b3]/20 shadow-lg shadow-[#4fb7b3]/10'
-                    : 'bg-white/10 border-white/10 hover:border-white/20 hover:bg-white/15'
-                    }`}
-                >
-                  {/* Day Header */}
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-lg ${day.tournament
-                        ? 'bg-gradient-to-br from-[#a8fbd3] to-[#4fb7b3] text-black'
-                        : 'bg-white/10 text-[#a8fbd3]'
-                        }`}>
-                        <div className="text-center leading-none">
-                          <div className="text-[9px] md:text-[10px] font-mono uppercase opacity-80 font-bold">
-                            {day.day}
-                          </div>
-                          <div className="text-base md:text-lg font-bold">
-                            {day.dayNum}
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="text-xs md:text-sm font-heading font-bold text-white tracking-wide">
-                          {day.date.replace(/,.*/, '')}
-                        </h3>
-                        <p className="text-[9px] md:text-[10px] text-gray-300 font-medium">
-                          {day.date.match(/,\s*(.*)$/)?.[1]}
-                        </p>
-                      </div>
-                    </div>
-                    {day.tournament && (
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#a8fbd3]/20 border border-[#a8fbd3]/40 rounded-full">
-                        <Trophy className="w-3 h-3 md:w-4 md:h-4 text-[#a8fbd3]" />
-                        <span className="text-[10px] md:text-xs font-bold text-[#a8fbd3] uppercase tracking-wide">
-                          {day.tournamentDay?.replace('Tournament ', '')}
-                        </span>
-                      </div>
+            {isMobile ? (
+              // Mobile View: Single Day Display
+              <motion.div
+                key={selectedMobileDayIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`p-5 rounded-2xl border backdrop-blur-xl ${TRIP_SCHEDULE[selectedMobileDayIndex].tournament
+                  ? 'bg-gradient-to-br from-[#4fb7b3]/20 via-[#4fb7b3]/10 to-[#637ab9]/20 border-[#4fb7b3]/30'
+                  : 'bg-white/10 border-white/10'
+                  }`}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-1">
+                      {TRIP_SCHEDULE[selectedMobileDayIndex].day} <span className="text-[#4fb7b3]">Apr {TRIP_SCHEDULE[selectedMobileDayIndex].dayNum}</span>
+                    </h3>
+                    {TRIP_SCHEDULE[selectedMobileDayIndex].tournament && (
+                      <span className="inline-block px-3 py-1 rounded-full bg-[#4fb7b3]/20 text-[#4fb7b3] text-xs font-bold uppercase tracking-wider border border-[#4fb7b3]/30">
+                        {TRIP_SCHEDULE[selectedMobileDayIndex].tournamentDay}
+                      </span>
                     )}
                   </div>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${TRIP_SCHEDULE[selectedMobileDayIndex].tournament ? 'bg-[#4fb7b3] text-black' : 'bg-white/10 text-white'
+                    }`}>
+                    {TRIP_SCHEDULE[selectedMobileDayIndex].tournament ? <Trophy size={20} /> : <Calendar size={20} />}
+                  </div>
+                </div>
 
-                  {/* Activities */}
-                  <div className="space-y-2">
-                    {day.activities.map((activity, actIndex) => (
-                      <div
-                        key={actIndex}
-                        className="flex items-start gap-3"
-                      >
-                        <div className={`shrink-0 mt-0.5 ${day.tournament ? 'text-[#a8fbd3]' : 'text-gray-400'
+                <div className="space-y-4">
+                  {TRIP_SCHEDULE[selectedMobileDayIndex].activities.map((activity, actIndex) => (
+                    <div key={actIndex} className="flex gap-4 items-start">
+                      <div className={`mt-1 p-2 rounded-lg ${TRIP_SCHEDULE[selectedMobileDayIndex].tournament ? 'bg-[#4fb7b3]/20 text-[#4fb7b3]' : 'bg-white/5 text-gray-400'
+                        }`}>
+                        {getIcon(activity.type, activity.description)}
+                      </div>
+                      <div>
+                        {activity.time && (
+                          <div className="text-sm font-mono font-bold text-[#a8fbd3] mb-0.5">{activity.time}</div>
+                        )}
+                        <div className="text-gray-200 leading-snug">{activity.description}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              // Desktop View: List ALL days
+              TRIP_SCHEDULE.map((day, dayIndex) => {
+                // Helper function to get icon based on activity type and description
+                const getIcon = (type: string, description: string) => {
+                  switch (type) {
+                    case 'departure':
+                    case 'arrival':
+                      return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
+                    case 'transfer':
+                      // Check if it's airport transfer or local transfer
+                      if (description.toLowerCase().includes('airport')) {
+                        return <Plane className="w-4 h-4 md:w-5 md:h-5" />;
+                      } else {
+                        return <Bus className="w-4 h-4 md:w-5 md:h-5" />;
+                      }
+                    case 'game':
+                      return <Activity className="w-4 h-4 md:w-5 md:h-5" />;
+                    case 'meal':
+                      return <Utensils className="w-4 h-4 md:w-5 md:h-5" />;
+                    case 'tour':
+                      return <MapPinned className="w-4 h-4 md:w-5 md:h-5" />;
+                    case 'tournament':
+                      return <Trophy className="w-4 h-4 md:w-5 md:h-5" />;
+                    case 'free':
+                      return <Hotel className="w-4 h-4 md:w-5 md:h-5" />;
+                    default:
+                      return <Calendar className="w-4 h-4 md:w-5 md:h-5" />;
+                  }
+                };
+
+                return (
+                  <motion.div
+                    key={dayIndex}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: dayIndex * 0.05 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    whileHover={{ y: -3 }}
+                    className={`group relative p-2 md:p-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${day.tournament
+                      ? 'bg-gradient-to-br from-[#4fb7b3]/20 to-[#637ab9]/20 border-[#4fb7b3]/30 hover:border-[#4fb7b3]/50 hover:bg-[#4fb7b3]/20 shadow-lg shadow-[#4fb7b3]/10'
+                      : 'bg-white/10 border-white/10 hover:border-white/20 hover:bg-white/15'
+                      }`}
+                  >
+                    {/* Day Header */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className={`flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-lg ${day.tournament
+                          ? 'bg-gradient-to-br from-[#a8fbd3] to-[#4fb7b3] text-black'
+                          : 'bg-white/10 text-[#a8fbd3]'
                           }`}>
-                          {getIcon(activity.type, activity.description)}
+                          <div className="text-center leading-none">
+                            <div className="text-[9px] md:text-[10px] font-mono uppercase opacity-80 font-bold">
+                              {day.day}
+                            </div>
+                            <div className="text-base md:text-lg font-bold">
+                              {day.dayNum}
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[10px] md:text-xs leading-snug text-gray-200 font-medium">
-                            {activity.time && (
-                              <span className="font-mono font-bold text-white mr-2">
-                                {activity.time}
-                              </span>
-                            )}
-                            <span className={day.tournament ? 'text-white' : 'text-gray-200'}>
-                              {activity.description}
-                            </span>
+                        <div>
+                          <h3 className="text-xs md:text-sm font-heading font-bold text-white tracking-wide">
+                            {day.date.replace(/,.*/, '')}
+                          </h3>
+                          <p className="text-[9px] md:text-[10px] text-gray-300 font-medium">
+                            {day.date.match(/,\s*(.*)$/)?.[1]}
                           </p>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      {day.tournament && (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#a8fbd3]/20 border border-[#a8fbd3]/40 rounded-full">
+                          <Trophy className="w-3 h-3 md:w-4 md:h-4 text-[#a8fbd3]" />
+                          <span className="text-[10px] md:text-xs font-bold text-[#a8fbd3] uppercase tracking-wide">
+                            {day.tournamentDay?.replace('Tournament ', '')}
+                          </span>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Tournament Day Badge Overlay */}
-                  {day.tournament && (
-                    <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#a8fbd3] to-[#4fb7b3] rounded-l-xl" />
-                  )}
-                </motion.div>
-              );
-            })}
+                    {/* Activities */}
+                    <div className="space-y-2">
+                      {day.activities.map((activity, actIndex) => (
+                        <div
+                          key={actIndex}
+                          className="flex items-start gap-3"
+                        >
+                          <div className={`shrink-0 mt-0.5 ${day.tournament ? 'text-[#a8fbd3]' : 'text-gray-400'
+                            }`}>
+                            {getIcon(activity.type, activity.description)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] md:text-xs leading-snug text-gray-200 font-medium">
+                              {activity.time && (
+                                <span className="font-mono font-bold text-white mr-2">
+                                  {activity.time}
+                                </span>
+                              )}
+                              <span className={day.tournament ? 'text-white' : 'text-gray-200'}>
+                                {activity.description}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Tournament Day Badge Overlay */}
+                    {day.tournament && (
+                      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#a8fbd3] to-[#4fb7b3] rounded-l-xl" />
+                    )}
+                  </motion.div>
+                );
+              })
+            )}
           </div>
         </div>
       </section>
