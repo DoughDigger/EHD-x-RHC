@@ -1,3 +1,6 @@
+// Load environment variables
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -6,9 +9,26 @@ const path = require('path');
 const XLSX = require('xlsx');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+    : ['http://localhost:3000'];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
 app.use(bodyParser.json());
 
 const REG_DB_FILE = path.join(__dirname, 'registrations.json');
@@ -28,10 +48,10 @@ const writeDB = (file, data) => {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
 };
 
-// Admin credentials
+// Admin credentials from environment variables
 const ADMIN_CREDENTIALS = {
-    username: 'EHDAdmin',
-    password: 'Toms2026!'
+    username: process.env.ADMIN_USERNAME || 'EHDAdmin',
+    password: process.env.ADMIN_PASSWORD || 'Toms2026!'
 };
 
 // Register endpoint
