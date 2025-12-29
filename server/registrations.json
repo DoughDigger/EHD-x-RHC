@@ -37,5 +37,18 @@
     "level": "AA",
     "levelOther": "",
     "packageOther": "Need 1 Player + 4 Guests"
+  },
+  {
+    "id": "1767049316941",
+    "timestamp": "2025-12-29T23:01:56.941Z",
+    "confirmationToken": "30bb6e779ddb7aa832fd4d4b7d48013eb3478734ab853679f6acfae97d30ee17",
+    "confirmed": false,
+    "parentFirstName": "Debug",
+    "parentLastName": "User",
+    "email": "ehdtour@gmail.com",
+    "playerName": "Debug Player",
+    "playerCurrentLeague": "Debug",
+    "team": "Debug",
+    "level": "A"
   }
 ]

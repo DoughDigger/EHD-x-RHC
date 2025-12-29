@@ -1,13 +1,15 @@
 // Load environment variables
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const path = require('path');
+// const path = require('path'); // Already imported at top
 const XLSX = require('xlsx');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -57,10 +59,13 @@ const ADMIN_CREDENTIALS = {
 
 // Register endpoint
 app.post('/api/register', (req, res) => {
+    console.log('Incoming registration request from:', req.body.email);
     try {
         const newRegistration = {
             id: Date.now().toString(),
             timestamp: new Date().toISOString(),
+            confirmationToken: crypto.randomBytes(32).toString('hex'),
+            confirmed: false,
             ...req.body
         };
 
@@ -101,6 +106,46 @@ app.delete('/api/registrations/:id', (req, res) => {
     }
 });
 
+// Confirm email endpoint
+app.get('/api/confirm-email', (req, res) => {
+    try {
+        const { token } = req.query;
+        if (!token) {
+            return res.status(400).send('Invalid token');
+        }
+
+        let registrations = readDB(REG_DB_FILE);
+        const registration = registrations.find(reg => reg.confirmationToken === token);
+
+        if (!registration) {
+            return res.status(404).send('Registration not found or invalid token');
+        }
+
+        if (registration.confirmed) {
+            return res.send('<h1>Email already confirmed!</h1><p>You can close this window.</p>');
+        }
+
+        // Update registration
+        registration.confirmed = true;
+        // Persist changes
+        writeDB(REG_DB_FILE, registrations);
+
+        // Simple success page
+        res.send(`
+            <html>
+                <body style="font-family: Arial, sans-serif; background-color: #0f1025; color: white; text-align: center; padding-top: 50px;">
+                    <h1 style="color: #4fb7b3;">Email Confirmed!</h1>
+                    <p>Thank you, ${registration.parentFirstName}. Your registration for ${registration.playerName} is now confirmed.</p>
+                    <p>We will be in touch shortly.</p>
+                </body>
+            </html>
+        `);
+    } catch (error) {
+        console.error('Error confirming email:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 // Question endpoint
 app.post('/api/question', (req, res) => {
     try {
@@ -131,6 +176,8 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    logger: true, // Log to console
+    debug: true   // Include SMTP traffic in logs
 });
 
 // Email Template Function
@@ -175,9 +222,9 @@ const createEmailTemplate = (data) => {
                     <span class="value">${data.team}</span>
                 </div>
 
-                <p>We will be reviewing your registration and will contact you shortly with further details regarding the next steps.</p>
+                <p>Please confirm your email address by clicking the button below:</p>
                 
-                <a href="#" class="button">Visit Website</a>
+                <a href="http://localhost:${PORT}/api/confirm-email?token=${data.confirmationToken}" class="button">Confirm Email</a>
             </div>
             <div class="footer">
                 <p>&copy; 2026 EHD Tour. All rights reserved.</p>
