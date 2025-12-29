@@ -224,7 +224,7 @@ const createEmailTemplate = (data) => {
 
                 <p>Please confirm your email address by clicking the button below:</p>
                 
-                <a href="http://localhost:${PORT}/api/confirm-email?token=${data.confirmationToken}" class="button">Confirm Email</a>
+                <a href="${process.env.API_BASE_URL || `http://localhost:${PORT}`}/api/confirm-email?token=${data.confirmationToken}" class="button">Confirm Email</a>
             </div>
             <div class="footer">
                 <p>&copy; 2026 EHD Tour. All rights reserved.</p>
