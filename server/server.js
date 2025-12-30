@@ -96,13 +96,10 @@ app.post('/api/register', async (req, res) => {
 
         console.log('New registration received:', newRegistration.playerName);
 
-        // Send confirmation email (awaited to log error if any, but don't fail registration)
-        try {
-            await sendConfirmationEmail(newRegistration);
-        } catch (emailError) {
-            console.error('Failed to send confirmation email during registration:', emailError);
-            // We don't fail the request here because the registration IS saved.
-        }
+        // Send confirmation email (fire-and-forget to prevent blocking registration)
+        sendConfirmationEmail(newRegistration)
+            .then(() => console.log('Confirmation email sent for:', newRegistration.id))
+            .catch(err => console.error('Failed to send confirmation email (background):', err));
 
         res.status(201).json({ message: 'Registration successful', id: newRegistration.id });
     } catch (error) {
