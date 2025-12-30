@@ -63,7 +63,7 @@ const ADMIN_CREDENTIALS = {
 };
 
 // Register endpoint
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
     console.log('Incoming registration request from:', req.body.email);
     try {
         // Calculate player and guest counts
@@ -96,8 +96,13 @@ app.post('/api/register', (req, res) => {
 
         console.log('New registration received:', newRegistration.playerName);
 
-        // Send confirmation email (async, don't wait for it to respond to client)
-        sendConfirmationEmail(newRegistration);
+        // Send confirmation email (awaited to log error if any, but don't fail registration)
+        try {
+            await sendConfirmationEmail(newRegistration);
+        } catch (emailError) {
+            console.error('Failed to send confirmation email during registration:', emailError);
+            // We don't fail the request here because the registration IS saved.
+        }
 
         res.status(201).json({ message: 'Registration successful', id: newRegistration.id });
     } catch (error) {
@@ -107,7 +112,7 @@ app.post('/api/register', (req, res) => {
 });
 
 // Resend confirmation email endpoint
-app.post('/api/resend-email/:id', (req, res) => {
+app.post('/api/resend-email/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const registrations = readDB(REG_DB_FILE);
@@ -118,10 +123,15 @@ app.post('/api/resend-email/:id', (req, res) => {
         }
 
         // Send confirmation email
-        sendConfirmationEmail(registration);
-        console.log('Resent confirmation email to:', registration.email);
-
-        res.status(200).json({ message: 'Email resent successfully' });
+        try {
+            await sendConfirmationEmail(registration);
+            console.log('Resent confirmation email to:', registration.email);
+            res.status(200).json({ message: 'Email resent successfully' });
+        } catch (emailError) {
+            console.error('Failed to send email:', emailError);
+            // We return 500 here so the frontend shows the alert
+            res.status(500).json({ message: 'Failed to send email: ' + emailError.message });
+        }
     } catch (error) {
         console.error('Error resending email:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -334,23 +344,31 @@ const createEmailTemplate = (data) => {
     `;
 };
 
-const sendConfirmationEmail = async (registrationData) => {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.log('Email credentials not set. Skipping email.');
-        return;
-    }
+const sendConfirmationEmail = (registrationData) => {
+    return new Promise((resolve, reject) => {
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.log('Email credentials not set. Skipping email.');
+            resolve('Skipped (no credentials)');
+            return;
+        }
 
-    try {
-        const info = await transporter.sendMail({
+        const mailOptions = {
             from: '"EHD Tour Registration" <' + process.env.EMAIL_USER + '>',
             to: registrationData.email,
             subject: "Registration Confirmed - EHD Tour 2026",
             html: createEmailTemplate(registrationData),
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+                reject(error);
+            } else {
+                console.log("Message sent: %s", info.messageId);
+                resolve(info);
+            }
         });
-        console.log("Message sent: %s", info.messageId);
-    } catch (error) {
-        console.error("Error sending email:", error);
-    }
+    });
 };
 
 
