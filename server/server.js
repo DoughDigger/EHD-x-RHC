@@ -269,7 +269,9 @@ console.log('User:', process.env.EMAIL_USER ? '(Set)' : '(Not Set)');
 console.log('---------------------------------');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // Built-in "well-known service" config for Gmail
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: emailPort,
+    secure: isSecure, // false for 587 (STARTTLS), true for 465
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -277,10 +279,10 @@ const transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false
     },
-    connectionTimeout: 10000, // 10 seconds timeout
+    connectionTimeout: 10000,
     greetingTimeout: 5000,
     socketTimeout: 10000,
-    family: 4, // Force IPv4
+    family: 4,
     logger: true,
     debug: true
 });
