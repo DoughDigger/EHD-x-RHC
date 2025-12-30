@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 // const path = require('path'); // Already imported at top
 const XLSX = require('xlsx');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const crypto = require('crypto');
 
 const app = express();
@@ -257,35 +257,12 @@ app.post('/api/question', (req, res) => {
     }
 });
 
-// Email Transporter Setup
-const emailPort = process.env.EMAIL_PORT || 587;
-const isSecure = emailPort == 465; // True for 465, false for other ports
+// Resend Email Setup
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-console.log('--- EMAIL CONFIGURATION DEBUG ---');
-console.log('Host:', process.env.EMAIL_HOST || 'smtp.gmail.com');
-console.log('Port:', emailPort);
-console.log('Secure (SSL):', isSecure);
-console.log('User:', process.env.EMAIL_USER ? '(Set)' : '(Not Set)');
-console.log('---------------------------------');
-
-const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: emailPort,
-    secure: isSecure, // false for 587 (STARTTLS), true for 465
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-        rejectUnauthorized: false
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 5000,
-    socketTimeout: 10000,
-    family: 4,
-    logger: true,
-    debug: true
-});
+console.log('--- EMAIL CONFIGURATION (RESEND) ---');
+console.log('API Key Set:', process.env.RESEND_API_KEY ? 'Yes' : 'No');
+console.log('------------------------------------');
 
 // Email Template Function
 const createEmailTemplate = (data) => {
@@ -358,31 +335,32 @@ const createEmailTemplate = (data) => {
     `;
 };
 
-const sendConfirmationEmail = (registrationData) => {
-    return new Promise((resolve, reject) => {
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.log('Email credentials not set. Skipping email.');
-            resolve('Skipped (no credentials)');
-            return;
+const sendConfirmationEmail = async (registrationData) => {
+    if (!process.env.RESEND_API_KEY) {
+        console.log('Resend API Key not set. Skipping email.');
+        return;
+    }
+
+    try {
+        const data = await resend.emails.send({
+            from: 'EHD Tour <onboarding@resend.dev>',
+            to: [registrationData.email],
+            reply_to: 'ehdtour@gmail.com', // Set reply-to so users reply to you
+            subject: 'Registration Confirmed - EHD Tour 2026',
+            html: createEmailTemplate(registrationData),
+        });
+
+        if (data.error) {
+            console.error('Error sending email:', data.error);
+            throw new Error(data.error.message);
         }
 
-        const mailOptions = {
-            from: '"EHD Tour Registration" <' + process.env.EMAIL_USER + '>',
-            to: registrationData.email,
-            subject: "Registration Confirmed - EHD Tour 2026",
-            html: createEmailTemplate(registrationData),
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error("Error sending email:", error);
-                reject(error);
-            } else {
-                console.log("Message sent: %s", info.messageId);
-                resolve(info);
-            }
-        });
-    });
+        console.log('Email sent successfully:', data.id);
+        return data;
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw error;
+    }
 };
 
 
