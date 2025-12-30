@@ -261,16 +261,26 @@ app.post('/api/question', (req, res) => {
 });
 
 // Email Transporter Setup
+// Email Transporter Setup
+const emailPort = process.env.EMAIL_PORT || 587;
+const isSecure = emailPort == 465; // True for 465, false for other ports
+
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: process.env.EMAIL_PORT || 587,
-    secure: false, // true for 465, false for other ports
+    port: emailPort,
+    secure: isSecure,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
-    logger: true, // Log to console
-    debug: true   // Include SMTP traffic in logs
+    tls: {
+        // Do not fail on invalid certs
+        rejectUnauthorized: false
+    },
+    // Force IPv4 to avoid IPv6 connectivity issues
+    family: 4,
+    logger: true,
+    debug: true
 });
 
 // Email Template Function
