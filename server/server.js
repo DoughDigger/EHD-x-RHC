@@ -212,11 +212,27 @@ const createEmailTemplate = (data) => {
                 <p>Thank you for registering <strong>${data.playerName}</strong> for the EHD x RHC 2026 Spring Tour. We have successfully received your information.</p>
                 
                 <div class="details">
+                    <span class="label">Parent Name</span>
+                    <span class="value">${data.parentFirstName} ${data.parentLastName}</span>
+
+                    <span class="label">Contact Email</span>
+                    <span class="value">${data.email}</span>
+
                     <span class="label">Package</span>
                     <span class="value">${data.packageName || 'Standard Package'}</span>
+                    ${data.packageName === 'Other' && data.packageOther ? `
+                    <span class="label">Package Details</span>
+                    <span class="value">${data.packageOther}</span>
+                    ` : ''}
                     
+                    <span class="label">Player Name</span>
+                    <span class="value">${data.playerName}</span>
+
                     <span class="label">Level</span>
                     <span class="value">${data.level} ${data.level === 'Other' ? `(${data.levelOther})` : ''}</span>
+
+                    <span class="label">Current League</span>
+                    <span class="value">${data.playerCurrentLeague}</span>
                     
                     <span class="label">Team</span>
                     <span class="value">${data.team}</span>

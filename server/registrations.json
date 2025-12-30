@@ -50,5 +50,44 @@
     "playerCurrentLeague": "Debug",
     "team": "Debug",
     "level": "A"
+  },
+  {
+    "id": "1767052301818",
+    "timestamp": "2025-12-29T23:51:41.818Z",
+    "confirmationToken": "ea0f1abb8abf4c36dcc42bcc3b81e4932f0ec8cef4b0c781d2c0eb82e1e3a8e9",
+    "confirmed": false,
+    "parentFirstName": "LocalTest",
+    "parentLastName": "User",
+    "email": "ehdtour@gmail.com",
+    "playerName": "Test Player",
+    "playerCurrentLeague": "Test",
+    "team": "Test",
+    "level": "A"
+  },
+  {
+    "id": "1767052410179",
+    "timestamp": "2025-12-29T23:53:30.179Z",
+    "confirmationToken": "e0cf5c06184e4db95b14cbcb0c9f43569dd3a296de7fd57de37e31c728d360d5",
+    "confirmed": false,
+    "parentFirstName": "LocalTest",
+    "parentLastName": "User2",
+    "email": "ehdtour@gmail.com",
+    "playerName": "Test Player2",
+    "playerCurrentLeague": "Test",
+    "team": "Test",
+    "level": "A"
+  },
+  {
+    "id": "1767052453413",
+    "timestamp": "2025-12-29T23:54:13.414Z",
+    "confirmationToken": "a1165b56302a87e5b233a94e1ab29e9db006fe30d866689afbeea35757945413",
+    "confirmed": false,
+    "parentFirstName": "LogTest",
+    "parentLastName": "User3",
+    "email": "ehdtour@gmail.com",
+    "playerName": "Test Player3",
+    "playerCurrentLeague": "Test",
+    "team": "Test",
+    "level": "A"
   }
 ]
