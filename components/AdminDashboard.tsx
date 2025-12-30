@@ -205,8 +205,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                     <LayoutDashboard className="w-6 h-6 text-[#637ab9]" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-heading font-bold text-white uppercase tracking-widest leading-tight">
-                                        Admin Panel
+                                    <h2 className="text-2xl font-heading font-bold text-white uppercase tracking-widest leading-tight flex items-center gap-2">
+                                        Admin Panel <span className="text-xs bg-[#4fb7b3] text-black px-1.5 py-0.5 rounded">v1.1</span>
                                     </h2>
                                 </div>
                             </div>

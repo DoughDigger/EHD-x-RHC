@@ -14,6 +14,11 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+console.log('Server starting...');
+console.log('Email User Configured:', process.env.EMAIL_USER ? 'Yes' : 'No');
+console.log('Email Pass Configured:', process.env.EMAIL_PASS ? 'Yes' : 'No');
+console.log('API Base URL:', process.env.API_BASE_URL);
+
 // CORS configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
