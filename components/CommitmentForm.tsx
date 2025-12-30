@@ -61,7 +61,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                 },
                 body: JSON.stringify({
                     ...formData,
-                    packageName
+                    packageName: packageName || formData.packageName
                 }),
             });
 

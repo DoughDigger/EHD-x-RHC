@@ -123,6 +123,46 @@ app.post('/api/resend-email/:id', (req, res) => {
     }
 });
 
+// Update registration endpoint
+app.put('/api/registrations/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+        const registrations = readDB(REG_DB_FILE);
+        const index = registrations.findIndex(reg => reg.id === id);
+
+        if (index === -1) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+
+        // Update fields
+        registrations[index] = { ...registrations[index], ...updates };
+
+        // Recalculate guest counts if package changed
+        if (updates.packageName) {
+            let playerCount = 1;
+            let guestCount = '';
+            if (updates.packageName === '1 Player + 1 Parent') {
+                guestCount = 1;
+            } else if (updates.packageName === '1 Player + 2 Guests') {
+                guestCount = 2;
+            } else if (updates.packageName === '1 Player + 3 Guests') {
+                guestCount = 3;
+            }
+            registrations[index].playerCount = playerCount;
+            registrations[index].guestCount = guestCount;
+        }
+
+        writeDB(REG_DB_FILE, registrations);
+        console.log('Registration updated:', id);
+
+        res.status(200).json(registrations[index]);
+    } catch (error) {
+        console.error('Error updating registration:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 // Delete registration endpoint
 app.delete('/api/registrations/:id', (req, res) => {
     try {

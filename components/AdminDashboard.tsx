@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare, Trash2, Download, Mail } from 'lucide-react';
+import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare, Trash2, Download, Mail, Pencil, Save } from 'lucide-react';
 import { API_URL } from '../config';
 
 interface Registration {
@@ -43,6 +43,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
     const [activeTab, setActiveTab] = useState<'registrations' | 'questions'>('registrations');
     const [loading, setLoading] = useState(false);
     const [expandedId, setExpandedId] = useState<string | null>(null);
+    const [editingRegistration, setEditingRegistration] = useState<Registration | null>(null);
+    const [editForm, setEditForm] = useState<Partial<Registration>>({});
 
     const fetchData = async () => {
         setLoading(true);
@@ -124,6 +126,42 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
             }
         } catch (error) {
             console.error('Error resending email:', error);
+            alert('Error connecting to server');
+        }
+    };
+
+    const handleEditClick = (reg: Registration) => {
+        setEditingRegistration(reg);
+        setEditForm({ ...reg });
+    };
+
+    const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setEditForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSaveEdit = async () => {
+        if (!editingRegistration) return;
+
+        try {
+            const response = await fetch(`${API_URL}/api/registrations/${editingRegistration.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editForm),
+            });
+
+            if (response.ok) {
+                const updatedReg = await response.json();
+                setRegistrations(registrations.map(r => r.id === updatedReg.id ? updatedReg : r));
+                setEditingRegistration(null);
+                alert('Registration updated successfully');
+            } else {
+                alert('Failed to update registration');
+            }
+        } catch (error) {
+            console.error('Error updating registration:', error);
             alert('Error connecting to server');
         }
     };
@@ -293,6 +331,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                                                 <Mail className="w-4 h-4" />
                                                             </button>
                                                             <button
+                                                                onClick={(e) => { e.stopPropagation(); handleEditClick(reg); }}
+                                                                className="p-2 hover:bg-[#637ab9]/20 text-gray-400 hover:text-[#637ab9] rounded-full transition-colors"
+                                                                title="Edit Entry"
+                                                            >
+                                                                <Pencil className="w-4 h-4" />
+                                                            </button>
+                                                            <button
                                                                 onClick={(e) => { e.stopPropagation(); handleDelete(reg.id, 'registrations'); }}
                                                                 className="p-2 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-full transition-colors"
                                                                 title="Delete Entry"
@@ -330,6 +375,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                                                 title="Resend Email"
                                                             >
                                                                 <Mail className="w-4 h-4" />
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); handleEditClick(reg); }}
+                                                                className="p-2 text-[#637ab9]/50 hover:text-[#637ab9] transition-colors"
+                                                            >
+                                                                <Pencil className="w-4 h-4" />
                                                             </button>
                                                             <button
                                                                 onClick={(e) => { e.stopPropagation(); handleDelete(reg.id, 'registrations'); }}
@@ -487,7 +538,92 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                     </div>
                 </motion.div>
             )}
+            <EditModal
+                isOpen={!!editingRegistration}
+                onClose={() => setEditingRegistration(null)}
+                onSave={handleSaveEdit}
+                onChange={handleEditChange}
+                formData={editForm}
+            />
         </AnimatePresence>
+    );
+};
+
+// Edit Modal Component (Inline for simplicity)
+const EditModal = ({ isOpen, onClose, onSave, onChange, formData }: { isOpen: boolean, onClose: () => void, onSave: () => void, onChange: (e: any) => void, formData: any }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <div className="bg-[#1a1b3b] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
+                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-black/20">
+                    <h3 className="text-xl font-heading font-bold text-white uppercase tracking-widest">Edit Registration</h3>
+                    <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <div className="p-6 space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Package</label>
+                            <select name="packageName" value={formData.packageName} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none">
+                                <option value="1 Player + 1 Parent">1 Player + 1 Parent</option>
+                                <option value="1 Player + 2 Guests">1 Player + 2 Guests</option>
+                                <option value="1 Player + 3 Guests">1 Player + 3 Guests</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Player Name</label>
+                            <input type="text" name="playerName" value={formData.playerName} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Parent First Name</label>
+                            <input type="text" name="parentFirstName" value={formData.parentFirstName} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Parent Last Name</label>
+                            <input type="text" name="parentLastName" value={formData.parentLastName} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                        </div>
+                        <div className="md:col-span-2">
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Email</label>
+                            <input type="email" name="email" value={formData.email} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Level</label>
+                            <select name="level" value={formData.level} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none">
+                                <option value="A">A</option>
+                                <option value="AA">AA</option>
+                                <option value="AAA">AAA</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        {formData.level === 'Other' && (
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Level Other</label>
+                                <input type="text" name="levelOther" value={formData.levelOther || ''} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                            </div>
+                        )}
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">League</label>
+                            <input type="text" name="playerCurrentLeague" value={formData.playerCurrentLeague} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase">Team</label>
+                            <input type="text" name="team" value={formData.team} onChange={onChange} className="w-full bg-black/40 border border-white/10 rounded-lg p-2.5 text-white focus:border-[#4fb7b3] outline-none" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="p-6 border-t border-white/10 bg-black/20 flex gap-4 justify-end">
+                    <button onClick={onClose} className="px-6 py-2 border border-white/10 rounded-lg text-white hover:bg-white/5 transition-colors font-bold uppercase text-xs tracking-wider">Cancel</button>
+                    <button onClick={onSave} className="px-6 py-2 bg-[#4fb7b3] rounded-lg text-black hover:bg-white transition-colors font-bold uppercase text-xs tracking-wider flex items-center gap-2">
+                        <Save className="w-4 h-4" /> Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 };
 
