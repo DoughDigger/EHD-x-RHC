@@ -138,10 +138,10 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                             required
                             className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all cursor-pointer"
                         >
-                            <option value="1 Player + 1 Parent">1 Player + 1 Parent ($3,400)</option>
-                            <option value="1 Player + 2 Guests">1 Player + 2 Guests ($4,600)</option>
-                            <option value="1 Player + 3 Guests">1 Player + 3 Guests ($5,900)</option>
-                            <option value="Other">Other / Custom Package</option>
+                            <option className="bg-[#1a1b3b] text-white" value="1 Player + 1 Parent">1 Player + 1 Parent ($3,400)</option>
+                            <option className="bg-[#1a1b3b] text-white" value="1 Player + 2 Guests">1 Player + 2 Guests ($4,600)</option>
+                            <option className="bg-[#1a1b3b] text-white" value="1 Player + 3 Guests">1 Player + 3 Guests ($5,900)</option>
+                            <option className="bg-[#1a1b3b] text-white" value="Other">Other / Custom Package</option>
                         </select>
                     </div>
                 )}
@@ -260,9 +260,9 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                                     required
                                     className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all cursor-pointer"
                                 >
-                                    <option value="F">F</option>
-                                    <option value="D">D</option>
-                                    <option value="G">G</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="F">F</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="D">D</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="G">G</option>
                                 </select>
                             </div>
                             <div>
@@ -277,10 +277,10 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                                     required
                                     className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all cursor-pointer"
                                 >
-                                    <option value="A">A</option>
-                                    <option value="AA">AA</option>
-                                    <option value="AAA">AAA</option>
-                                    <option value="Other">Other</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="A">A</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="AA">AA</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="AAA">AAA</option>
+                                    <option className="bg-[#1a1b3b] text-white" value="Other">Other</option>
                                 </select>
                             </div>
 
