@@ -61,11 +61,27 @@ const ADMIN_CREDENTIALS = {
 app.post('/api/register', (req, res) => {
     console.log('Incoming registration request from:', req.body.email);
     try {
+        // Calculate player and guest counts
+        let playerCount = 1;
+        let guestCount = '';
+
+        const packageName = req.body.packageName || '';
+        if (packageName === '1 Player + 1 Parent') {
+            guestCount = 1;
+        } else if (packageName === '1 Player + 2 Guests') {
+            guestCount = 2;
+        } else if (packageName === '1 Player + 3 Guests') {
+            guestCount = 3;
+        }
+        // If 'Other', guestCount remains '' (empty string) as requested
+
         const newRegistration = {
             id: Date.now().toString(),
             timestamp: new Date().toISOString(),
             confirmationToken: crypto.randomBytes(32).toString('hex'),
             confirmed: false,
+            playerCount,
+            guestCount,
             ...req.body
         };
 
@@ -81,6 +97,28 @@ app.post('/api/register', (req, res) => {
         res.status(201).json({ message: 'Registration successful', id: newRegistration.id });
     } catch (error) {
         console.error('Error saving registration:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Resend confirmation email endpoint
+app.post('/api/resend-email/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const registrations = readDB(REG_DB_FILE);
+        const registration = registrations.find(reg => reg.id === id);
+
+        if (!registration) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+
+        // Send confirmation email
+        sendConfirmationEmail(registration);
+        console.log('Resent confirmation email to:', registration.email);
+
+        res.status(200).json({ message: 'Email resent successfully' });
+    } catch (error) {
+        console.error('Error resending email:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });

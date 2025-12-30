@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare, Trash2, Download } from 'lucide-react';
+import { X, LayoutDashboard, Database, RefreshCw, LogOut, ChevronDown, ChevronUp, HelpCircle, MessageSquare, Trash2, Download, Mail } from 'lucide-react';
 import { API_URL } from '../config';
 
 interface Registration {
@@ -20,6 +20,7 @@ interface Registration {
     team: string;
     level: string;
     levelOther?: string;
+    email: string;
 }
 
 interface Question {
@@ -103,6 +104,27 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
         } catch (error) {
             console.error('Error deleting entry:', error);
             alert('Error deleting entry');
+        }
+    };
+
+    const handleResendEmail = async (id: string, email: string) => {
+        if (!window.confirm(`Resend confirmation email to ${email}?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/api/resend-email/${id}`, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                alert('Email resent successfully');
+            } else {
+                alert('Failed to resend email');
+            }
+        } catch (error) {
+            console.error('Error resending email:', error);
+            alert('Error connecting to server');
         }
     };
 
@@ -264,6 +286,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                                         </div>
                                                         <div className="col-span-1 flex justify-center gap-2">
                                                             <button
+                                                                onClick={(e) => { e.stopPropagation(); handleResendEmail(reg.id, reg.email); }}
+                                                                className="p-2 hover:bg-[#4fb7b3]/20 text-gray-400 hover:text-[#4fb7b3] rounded-full transition-colors"
+                                                                title="Resend Confirmation Email"
+                                                            >
+                                                                <Mail className="w-4 h-4" />
+                                                            </button>
+                                                            <button
                                                                 onClick={(e) => { e.stopPropagation(); handleDelete(reg.id, 'registrations'); }}
                                                                 className="p-2 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-full transition-colors"
                                                                 title="Delete Entry"
@@ -295,6 +324,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose, onLogo
                                                                 }`}>
                                                                 {reg.packageName}
                                                             </span>
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); handleResendEmail(reg.id, reg.email); }}
+                                                                className="p-2 text-[#4fb7b3]/50 hover:text-[#4fb7b3] transition-colors"
+                                                                title="Resend Email"
+                                                            >
+                                                                <Mail className="w-4 h-4" />
+                                                            </button>
                                                             <button
                                                                 onClick={(e) => { e.stopPropagation(); handleDelete(reg.id, 'registrations'); }}
                                                                 className="p-2 text-red-500/50 hover:text-red-500 transition-colors"
