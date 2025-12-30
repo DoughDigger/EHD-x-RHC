@@ -258,9 +258,15 @@ app.post('/api/question', (req, res) => {
 });
 
 // Email Transporter Setup
-// Email Transporter Setup
 const emailPort = process.env.EMAIL_PORT || 587;
 const isSecure = emailPort == 465; // True for 465, false for other ports
+
+console.log('--- EMAIL CONFIGURATION DEBUG ---');
+console.log('Host:', process.env.EMAIL_HOST || 'smtp.gmail.com');
+console.log('Port:', emailPort);
+console.log('Secure (SSL):', isSecure);
+console.log('User:', process.env.EMAIL_USER ? '(Set)' : '(Not Set)');
+console.log('---------------------------------');
 
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
