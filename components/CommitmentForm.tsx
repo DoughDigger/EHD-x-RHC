@@ -27,6 +27,7 @@ export interface CommitmentFormData {
     team: string;
     level: string;
     levelOther?: string;
+    position: string;
     packageName?: string;
     packageOther?: string;
 }
@@ -41,6 +42,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
         team: '',
         level: 'A',
         levelOther: '',
+        position: 'F',
         packageName: '1 Player + 1 Parent',
         packageOther: '',
     });
@@ -77,6 +79,7 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                     team: '',
                     level: 'A',
                     levelOther: '',
+                    position: 'F',
                     packageName: '1 Player + 1 Parent',
                     packageOther: '',
                 });
@@ -244,7 +247,24 @@ const CommitmentForm: React.FC<CommitmentFormProps> = ({ isOpen, onClose, onSubm
                             />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label htmlFor="position" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
+                                    Position *
+                                </label>
+                                <select
+                                    id="position"
+                                    name="position"
+                                    value={formData.position}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#4fb7b3] focus:ring-1 focus:ring-[#4fb7b3] transition-all cursor-pointer"
+                                >
+                                    <option value="F">F</option>
+                                    <option value="D">D</option>
+                                    <option value="G">G</option>
+                                </select>
+                            </div>
                             <div>
                                 <label htmlFor="level" className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
                                     Level *

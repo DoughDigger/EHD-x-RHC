@@ -315,6 +315,9 @@ const createEmailTemplate = (data) => {
                     <span class="label">Level</span>
                     <span class="value">${data.level} ${data.level === 'Other' ? `(${data.levelOther})` : ''}</span>
 
+                    <span class="label">Position</span>
+                    <span class="value">${data.position}</span>
+
                     <span class="label">Current League</span>
                     <span class="value">${data.playerCurrentLeague}</span>
                     
