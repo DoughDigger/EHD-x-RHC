@@ -122,7 +122,7 @@ const DIVISIONS: Artist[] = [
         { name: 'Fee based on 1 Player + 3 Guests (1 room) package:', price: '$ 5,900' }
       ],
       customText: 'Custom Packages are available on request',
-      paymentTerms: 'Non-refundable deposit of 50% from total package price required by Feb 15, 2026, full payment by Mar 15, 2026'
+      paymentTerms: 'Non-refundable deposit of 50% from total package price required by Jan 15, 2027, full payment by Feb 15, 2027'
     }
   },
 ];
