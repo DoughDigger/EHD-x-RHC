@@ -46,11 +46,11 @@ const DIVISIONS: Artist[] = [
     id: '1',
     name: 'Tournament Details',
     genre: 'Format & Rules',
-    day: 'APR 17-19',
+    day: 'MAR 26-29',
     image: 'https://images.unsplash.com/photo-1580748141549-71748dbe0bdc?q=80&w=1000&auto=format&fit=crop',
-    intro: `RIGA HOCKEY CUP is the largest youth ice hockey tournament in Europe, celebrating its 20th anniversary in 2026. The tournament fosters sportsmanship and the development of skills across multiple divisions in a competitive yet friendly environment.`,
+    intro: `RIGA HOCKEY CUP is the largest youth ice hockey tournament in Europe, celebrating its 21st anniversary in 2027. The tournament fosters sportsmanship and the development of skills across multiple divisions in a competitive yet friendly environment.`,
     thrillSection: {
-      title: '3 DAYS OF THRILL',
+      title: '4 DAYS OF THRILL',
       items: [
         'Live player stats updated on official website www.rhc.com',
         'Active social media posts coverage',
@@ -63,13 +63,13 @@ const DIVISIONS: Artist[] = [
         url: 'https://www.youtube.com/watch?v=iPvC6G0_bdg'
       }
     },
-    description: `GAME FORMAT:\nEvery team is guaranteed 7 games over 3 days. Games consist of 3 x 15-minute stop-time periods. Ice resurfacing takes place between every game. \n\nRULES:\nAll games are conducted in accordance with IIHF rules. Body checking is allowed primarily along the boards when there's a "clear intention of playing the puck or attempting to gain possession," following IIHF guidelines but with unique elements, meaning hits must be puck-focused (e.g. open ice hits are ruled as penalty). \n\nSCHEDULE:\nThe tournament begins Friday morning and concludes with championship games on Sunday afternoon. A full schedule is released 2 weeks prior to the event.`
+    description: `GAME FORMAT:\nEvery team is guaranteed 7 games over 4 days. Games consist of 3 x 15-minute stop-time periods. Ice resurfacing takes place between every game. \n\nRULES:\nAll games are conducted in accordance with IIHF rules. Body checking is allowed primarily along the boards when there's a "clear intention of playing the puck or attempting to gain possession," following IIHF guidelines but with unique elements, meaning hits must be puck-focused (e.g. open ice hits are ruled as penalty). \n\nSCHEDULE:\nThe tournament begins Friday morning and concludes with championship games on Monday afternoon. A full schedule is released 2 weeks prior to the event.`
   },
   {
     id: '2',
     name: 'Arenas',
     genre: 'Venues',
-    day: 'APR 17-19',
+    day: 'MAR 26-29',
     image: '/arena_riga_thumb.jpg',
     images: ['/arena_riga_thumb.jpg', '/arena_1.jpg', '/arena_2.jpg', '/arena_3.jpg', '/arena_4.jpg', '/arena_5.jpg', '/arena_6.jpg', '/arena_7.jpg'],
     description: `RIGA HOCKEY CUP tournament is held in 10 new and modern arenas in close proximity each other.`,
@@ -88,7 +88,7 @@ const DIVISIONS: Artist[] = [
     id: '3',
     name: 'Pricing',
     genre: 'Packages',
-    day: 'APR 18-19',
+    day: 'MAR 26-29',
     image: '/pricing_tile_v2.jpg',
     description: '',
     thrillSection: {
@@ -96,10 +96,10 @@ const DIVISIONS: Artist[] = [
       items: [
         'Tournament Fee',
         'Jersey, socks, T-shirt and hat',
-        '6 nights (Check in Apr 14, Check out Apr 20) stay at 4* Hotel in Downtown Riga (Radisson Blu Daugava) incl. breakfast for all guests',
+        '7 nights (Check in Mar 23, Check out Mar 30) stay at 4* Hotel in Downtown Riga (Radisson Blu Daugava) incl. breakfast for all guests',
         'Team bus transfers x8 (Airport transfers x2, Round trip transfer to games x6)',
         '2 Guided Group Sightseeing Tours (Timing: Pre-tournament start; Options to be provided once roster confirmed)',
-        '3 lunches/ 2 dinners for Players only during Tournament days (Fri -Sat- Sun) at the Arenas',
+        '3 lunches/ 2 dinners for Players only during Tournament days (Fri -Sat- Sun -Mon) at the Arenas',
         '2 Pre-Tournament Exhibition games with local teams or practices',
         '1 Group Dinner (Traditional Latvian cuisine)'
       ]
@@ -122,7 +122,7 @@ const DIVISIONS: Artist[] = [
         { name: 'Fee based on 1 Player + 3 Guests (1 room) package:', price: '$ 5,900' }
       ],
       customText: 'Custom Packages are available on request',
-      paymentTerms: 'Non-refundable deposit of 50% from total package price required by Feb 15, 2026, full payment by Mar 15, 2026'
+      paymentTerms: 'Non-refundable deposit of 50% from total package price required by Jan 24, 2027, full payment by Feb 21, 2027'
     }
   },
 ];
@@ -142,7 +142,7 @@ const CAROUSEL_IMAGES = [
 ];
 
 const SOCIAL_LINKS = [
-  { icon: Globe, url: 'https://www.rhc.lv/en/u14-aa4/teams', label: 'Website' },
+  { icon: Globe, url: 'https://www.rhc.lv/en/u158/teams', label: 'Website' },
   { icon: Instagram, url: 'https://www.instagram.com/riga_hockey_cup/', label: 'Instagram' },
   { icon: TikTokIcon, url: 'https://www.tiktok.com/@rigahockeycup?is_from_webapp=1&sender_device=pc', label: 'TikTok' },
   { icon: Youtube, url: 'https://www.youtube.com/@rigahockeycup4240', label: 'YouTube' }
@@ -151,17 +151,17 @@ const SOCIAL_LINKS = [
 // Trip Schedule Data
 const TRIP_SCHEDULE = [
   {
-    date: 'Monday, Apr 13',
+    date: 'Monday, Mar 22',
     day: 'Mon',
-    dayNum: '13',
+    dayNum: '22',
     activities: [
       { time: '5pm', description: 'Departure from Pearson Airport (red-eye flight with 1 layover)', type: 'departure' }
     ]
   },
   {
-    date: 'Tuesday, Apr 14',
+    date: 'Tuesday, Mar 23',
     day: 'Tue',
-    dayNum: '14',
+    dayNum: '23',
     activities: [
       { time: '1pm', description: 'Arrival at Riga Airport', type: 'arrival' },
       { time: '', description: 'Transfer to hotel', type: 'transfer' },
@@ -169,9 +169,9 @@ const TRIP_SCHEDULE = [
     ]
   },
   {
-    date: 'Wednesday, Apr 15',
+    date: 'Wednesday, Mar 24',
     day: 'Wed',
-    dayNum: '15',
+    dayNum: '24',
     activities: [
       { time: '7am', description: 'Breakfast', type: 'meal' },
       { time: '10am', description: 'Guided Tour', type: 'tour' },
@@ -181,9 +181,9 @@ const TRIP_SCHEDULE = [
     ]
   },
   {
-    date: 'Thursday, Apr 16',
+    date: 'Thursday, Mar 25',
     day: 'Thu',
-    dayNum: '16',
+    dayNum: '25',
     activities: [
       { time: '7am', description: 'Breakfast', type: 'meal' },
       { time: '10am', description: 'Guided Tour', type: 'tour' },
@@ -193,9 +193,9 @@ const TRIP_SCHEDULE = [
     ]
   },
   {
-    date: 'Friday, Apr 17',
+    date: 'Friday, Mar 26',
     day: 'Fri',
-    dayNum: '17',
+    dayNum: '26',
     tournament: true,
     tournamentDay: 'Tournament Day 1',
     activities: [
@@ -204,9 +204,9 @@ const TRIP_SCHEDULE = [
     ]
   },
   {
-    date: 'Saturday, Apr 18',
+    date: 'Saturday, Mar 27',
     day: 'Sat',
-    dayNum: '18',
+    dayNum: '27',
     tournament: true,
     tournamentDay: 'Tournament Day 2',
     activities: [
@@ -215,21 +215,32 @@ const TRIP_SCHEDULE = [
     ]
   },
   {
-    date: 'Sunday, Apr 19',
+    date: 'Sunday, Mar 28',
     day: 'Sun',
-    dayNum: '19',
+    dayNum: '28',
     tournament: true,
-    tournamentDay: 'Tournament Day 3 (Final)',
+    tournamentDay: 'Tournament Day 3',
     activities: [
       { time: '', description: 'Agenda for the Day TBD based on Tournament Schedule', type: 'tournament' },
-      { time: '', description: '2/3 games expected', type: 'tournament' },
+      { time: '', description: '2/3 games expected', type: 'tournament' }
+    ]
+  },
+  {
+    date: 'Monday, Mar 29',
+    day: 'Mon',
+    dayNum: '29',
+    tournament: true,
+    tournamentDay: 'Tournament Day 4 (Final)',
+    activities: [
+      { time: '', description: 'Agenda for the Day TBD based on Tournament Schedule', type: 'tournament' },
+      { time: '', description: 'Championship games', type: 'tournament' },
       { time: '', description: 'Team Dinner - Latvian Traditional Cuisine', type: 'meal' }
     ]
   },
   {
-    date: 'Monday, Apr 20',
-    day: 'Mon',
-    dayNum: '20',
+    date: 'Tuesday, Mar 30',
+    day: 'Tue',
+    dayNum: '30',
     activities: [
       { time: '7am', description: 'Breakfast', type: 'meal' },
       { time: '9am', description: 'Transfer to Airport', type: 'transfer' },
@@ -560,16 +571,16 @@ const App: React.FC = () => {
           >
             {/* Mobile Layout */}
             <div className="flex flex-col items-center gap-1.5 md:hidden text-center">
-              <span className="font-bold text-white leading-tight">Riga, Latvia <span className="text-[#4fb7b3]">|</span> U14 (born 2012) AA/AAA</span>
-              <span className="leading-tight">Travel Dates Apr 13-20, 2026</span>
-              <span className="leading-tight">Tournament: Apr 17-19, 2026</span>
+              <span className="font-bold text-white leading-tight">Riga, Latvia <span className="text-[#4fb7b3]">|</span> U15 (born 2012) AA/AAA</span>
+              <span className="leading-tight">Travel Dates Mar 22-30, 2027</span>
+              <span className="leading-tight">Tournament: Mar 26-29, 2027</span>
             </div>
 
             {/* Desktop Layout */}
             <div className="hidden md:contents">
               <span className="font-bold text-white">Riga, Latvia</span>
               <span className="w-1.5 h-1.5 bg-[#4fb7b3] rounded-full animate-pulse" />
-              <span className="text-center">U14 (born 2012) AA/AAA | Travel Dates Apr 13-20, 2026 | Tournament: Apr 17-19, 2026</span>
+              <span className="text-center">U15 (born 2012) AA/AAA | Travel Dates Mar 22-30, 2027 | Tournament: Mar 26-29, 2027</span>
             </div>
           </motion.div>
 
@@ -597,7 +608,7 @@ const App: React.FC = () => {
           {/* Main Title */}
           <div className="relative w-full flex justify-center items-center px-2">
             <GradientText
-              text="Riga Hockey Cup 2026"
+              text="Riga Hockey Cup 2027"
               as="h1"
               className="text-[5vw] md:text-[5vw] leading-[0.9] font-black tracking-tighter text-center whitespace-nowrap"
             />
@@ -622,7 +633,7 @@ const App: React.FC = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-sm md:text-xl font-light max-w-screen-2xl mx-auto text-white/90 leading-relaxed drop-shadow-lg px-6 mb-3 md:mb-4"
           >
-            Celebrate the 20th Anniversary of Europe’s largest youth ice hockey tournament! The EHD Spring Tour invites you to Riga, Latvia, for an elite competition featuring top talent from Europe's hockey powerhouses such as Sweden, Finland, Czechia, Switzerland amongst others. Join over 250 teams for world-class hockey and an unforgettable international experience in one of Europe’s most passionate hockey cities.
+            Celebrate the 21st Anniversary of Europe’s largest youth ice hockey tournament! The EHD Spring Tour invites you to Riga, Latvia, for an elite competition featuring top talent from Europe's hockey powerhouses such as Sweden, Finland, Czechia, Switzerland amongst others. Join over 250 teams for world-class hockey and an unforgettable international experience in one of Europe’s most passionate hockey cities.
           </motion.p>
 
           {/* Main CTA Button */}
@@ -657,7 +668,7 @@ const App: React.FC = () => {
               <div key={key} className="flex whitespace-nowrap shrink-0">
                 {[...Array(2)].map((_, i) => (
                   <span key={i} className="text-xs md:text-2xl lg:text-3xl font-heading font-black px-3 md:px-4 lg:px-6 flex items-center gap-2 md:gap-3">
-                    EHD Spring Tour x Riga Hockey Cup 2026 | U14 (born 2012) AA/AAA | Travel Date: April 13 to April 20 <span className="text-black text-xs md:text-2xl lg:text-3xl">●</span>
+                    EHD Spring Tour x Riga Hockey Cup 2027 | U15 (born 2012) AA/AAA | Travel Date: March 22 to March 30 <span className="text-black text-xs md:text-2xl lg:text-3xl">●</span>
                   </span>
                 ))}
               </div>
@@ -700,7 +711,7 @@ const App: React.FC = () => {
                   Trip <GradientText text="Agenda" className="text-2xl md:text-4xl" />
                 </h2>
                 <p className="text-[#a8fbd3] font-mono uppercase tracking-widest text-xs">
-                  April 13-20, 2026
+                  March 22-30, 2027
                 </p>
               </div>
               <div className="max-w-3xl mx-auto px-3 py-2 bg-white/5 border border-white/10 rounded-lg backdrop-blur-md">
@@ -755,7 +766,7 @@ const App: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-1">
-                      {TRIP_SCHEDULE[selectedMobileDayIndex].day} <span className="text-[#4fb7b3]">Apr {TRIP_SCHEDULE[selectedMobileDayIndex].dayNum}</span>
+                      {TRIP_SCHEDULE[selectedMobileDayIndex].day} <span className="text-[#4fb7b3]">Mar {TRIP_SCHEDULE[selectedMobileDayIndex].dayNum}</span>
                     </h3>
                     {TRIP_SCHEDULE[selectedMobileDayIndex].tournament && (
                       <span className="inline-block px-3 py-1 rounded-full bg-[#4fb7b3]/20 text-[#4fb7b3] text-xs font-bold uppercase tracking-wider border border-[#4fb7b3]/30">
@@ -1017,7 +1028,7 @@ const App: React.FC = () => {
                   Interest Registered!
                 </h3>
                 <p className="text-gray-400 font-mono text-lg mb-8">
-                  Thank you for your interest in the EHD x RHC 2026 Spring Tour. Our team will contact you shortly with further details.
+                  Thank you for your interest in the EHD x RHC 2027 Spring Tour. Our team will contact you shortly with further details.
                 </p>
                 <button
                   onClick={() => setIsRegistered(false)}
